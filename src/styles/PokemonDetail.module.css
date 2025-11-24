@@ -10,3 +10,157 @@ body {
   justify-content: center; 
   align-items: center;    
 }
+/* ========== */
+.containerPokemom {
+  width: 100vw;
+  height: 100vh;
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-family: 'Poppins', sans-serif;
+  background: linear-gradient(135deg, #b2ebf2, #80deea);
+  background-size: cover;
+  background-position: center;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+/* ========== */
+.title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #ff0000;
+  text-transform: capitalize;
+  text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+/* ========== */
+.card {
+  background: #ffffffdd; 
+  padding: 2rem;
+  border-radius: 1.5rem;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 600px;
+  width: 90%;
+  overflow-y: auto;
+  box-sizing: border-box;
+}
+
+/* ========== */
+.img {
+  width: 150px;
+  height: 150px;
+  object-fit: contain;
+  margin: 0.5rem;
+}
+
+/* ========== */
+p {
+  font-size: 1rem;
+  margin: 0.3rem 0;
+  color: #222;
+  font-weight: 500;
+}
+
+/* ========== */
+.types {
+  display: flex;
+  gap: 0.5rem;
+  margin: 1rem 0;
+}
+
+.type {
+  background-color: #ffcb05;
+  color: #222;
+  padding: 0.3rem 0.8rem;
+  border-radius: 1rem;
+  font-weight: 600;
+  text-transform: capitalize;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+/* ========== */
+.stats {
+  width: 100%;
+  margin-top: 1rem;
+}
+
+.stats h3 {
+  text-align: center;
+  margin-bottom: 0.5rem;
+  color: #d50000;
+}
+
+.stat {
+  display: flex;
+  justify-content: space-between;
+  background: #f0f0f0;
+  padding: 0.4rem 0.8rem;
+  border-radius: 0.8rem;
+  margin-bottom: 0.3rem;
+  font-weight: 500;
+  text-transform: capitalize;
+}
+
+/* ========== */
+.abilities {
+  width: 100%;
+  margin-top: 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.abilities h3 {
+  color: #d50000;
+  margin-bottom: 0.5rem;
+}
+
+.ability {
+  background: #29b6f6;
+  color: #fff;
+  padding: 0.3rem 0.8rem;
+  margin: 0.2rem;
+  border-radius: 1rem;
+  text-transform: capitalize;
+  font-weight: 600;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+/* ========== */
+.card::-webkit-scrollbar {
+  width: 8px;
+}
+
+.card::-webkit-scrollbar-thumb {
+  background: rgba(0,0,0,0.2);
+  border-radius: 4px;
+}
+
+.card::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.infoBoxes {
+  display: flex;
+  gap: 1rem; 
+  margin-top: 1rem;
+  width: 100%;
+  flex-wrap: wrap; 
+  justify-content: center;
+}
+
+.stats, .abilities {
+  background: #ffffffdd;
+  border-radius: 1rem;
+  padding: 1rem;
+  flex: 1 1 45%; 
+  box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+  box-sizing: border-box;
+}
