@@ -4,6 +4,8 @@ import { useGetPokemonListQuery } from "../services/pokemonApi";
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 
+import PokemonCard from '../componentes/PokemonCard';
+
 // Tipos da API
 interface PokemonListResult {
   name: string;
@@ -63,8 +65,8 @@ export default function PokemonList() {
     activeTab === "list"
       ? currentPokemons
       : activeTab === "favorites"
-      ? pokemonList.filter((p) => favorites.includes(p.name))
-      : pokemonList.filter((p) => caught.includes(p.name));
+        ? pokemonList.filter((p) => favorites.includes(p.name))
+        : pokemonList.filter((p) => caught.includes(p.name));
 
   return (
     <div className={stylesGlobal.containerPokemom}>
@@ -109,29 +111,16 @@ export default function PokemonList() {
             <div className={styles.screenContent}>
               <ul className={styles.list}>
                 {displayedPokemons.map((p) => (
-                  <li key={p.name} className={styles.listItem}>
-                    <img src={p.image ?? ""} alt={p.name} className={styles.img} />
-                    <p className={styles.name}>{p.name}</p>
-                    <div style={{ display: "flex", gap: "0.5rem", justifyContent: "center" }}>
-                      <button
-                        className={styles.detailsButton}
-                        onClick={() => toggleFavorite(p.name)}
-                      >
-                        {favorites.includes(p.name) ? "★ Favorito" : "☆ Favorito"}
-                      </button>
-                      <button
-                        className={styles.detailsButton}
-                        onClick={() => toggleCaught(p.name)}
-                      >
-                        {caught.includes(p.name) ? "✔ Apanhado" : "➕ Apanhar"}
-                      </button>
-                    </div>
-                    {activeTab === "list" && (
-                      <Link to={`/pokemon/${p.name}`}>
-                        <button className={styles.detailsButton}>Ver Detalhes</button>
-                      </Link>
-                    )}
-                  </li>
+                  <PokemonCard
+                    key={p.name}
+                    name={p.name}
+                    image={p.image}
+                    isFavorite={favorites.includes(p.name)}
+                    isCaught={caught.includes(p.name)}
+                    onToggleFavorite={toggleFavorite}
+                    onToggleCaught={toggleCaught}
+                    showDetailsButton={activeTab === 'list'}
+                  />
                 ))}
               </ul>
 
