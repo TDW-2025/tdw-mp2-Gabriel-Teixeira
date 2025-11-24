@@ -1,5 +1,18 @@
-/* Container */
-.container {
+html, body, #root {
+  height: 100%;
+  margin: 0;
+  font-family: 'Arial', sans-serif;
+  background-color: #e0f7fa;
+  overflow: hidden; 
+}
+
+body {
+  display: flex;
+  justify-content: center; 
+  align-items: center;     
+}
+/* containerDigimon */
+.containerDigimon {
   width: 100vw;
   min-height: 100vh;
   padding: 20px;
@@ -14,6 +27,22 @@
   position: relative;
 }
 
+/* containerPokemom */
+.containerPokemom {
+  padding: 2rem;
+  width: 100vw;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-family: 'Poppins', sans-serif;
+  background: linear-gradient(135deg, #b2ebf2, #80deea);
+  background-image: url('../assets/FundoPokemon.png');
+  background-size: cover;
+  background-position: center;
+  margin-top: 1%;
+  overflow: hidden; 
+}
 /* botão voltar para traz */
 .backButton {
   position: absolute; 
