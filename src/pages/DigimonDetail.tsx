@@ -6,26 +6,49 @@ import { HeartStraight } from "phosphor-react";
 import { useGetDigimonByNameQuery } from "../services/digimonApi";
 import styles from "../styles/DigimonDetail.module.css";
 import stylesGlobal from "../styles/Global.module.css";
-
+import type { Digimon } from "../types/digimon";
 
 export default function DigimonDetail() {
   const { name } = useParams<{ name: string }>();
-  const navigate = useNavigate();
   const decodedName = name ? decodeURIComponent(name) : "";
+  const navigate = useNavigate();
+
+  console.log("Nome recebido da rota:", decodedName); 
 
   const favoritos = useSelector((state: RootState) => state.favoritos.items);
   const dispatch = useDispatch();
 
-  // data: Digimon | undefined
-  const { data: digimon, isLoading, isError } = useGetDigimonByNameQuery(decodedName);
+  console.log("Lista de favoritos atual:", favoritos); 
 
-  if (isLoading) return <p className={styles.message}>Carregando detalhes...</p>;
-  if (isError) return <p className={styles.message}>Erro ao carregar detalhes.</p>;
-  if (!digimon) return <p className={styles.message}>Digimon não encontrado.</p>;
+  const { data, isLoading, isError } = useGetDigimonByNameQuery(decodedName);
+
+  const digimon: Digimon | undefined = data && data.length > 0 ? data[0] : undefined;
+
+  console.log("Dados do Digimon da API:", digimon); 
+
+  if (isLoading) {
+    console.log("Carregando Digimon...");
+    return <p className={styles.message}>Carregando detalhes...</p>;
+  }
+
+  if (isError) {
+    console.log("Erro ao carregar Digimon");
+    return <p className={styles.message}>Erro ao carregar detalhes.</p>;
+  }
+
+  if (!digimon) {
+    console.log("Digimon não encontrado");
+    return <p className={styles.message}>Digimon não encontrado.</p>;
+  }
 
   const toggleFavorito = () => {
-    if (favoritos.includes(digimon.name)) dispatch(removeFavorito(digimon.name));
-    else dispatch(addFavorito(digimon.name));
+    if (favoritos.includes(digimon.name)) {
+      console.log(`Removendo ${digimon.name} dos favoritos`);
+      dispatch(removeFavorito(digimon.name));
+    } else {
+      console.log(`Adicionando ${digimon.name} aos favoritos`);
+      dispatch(addFavorito(digimon.name));
+    }
   };
 
   return (
