@@ -1,0 +1,235 @@
+.fullpageRoot {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  overflow: hidden;
+}
+
+.fullpageStrip {
+  width: 33.33%;
+  position: relative;
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  justify-content: center;
+}
+
+.left {
+  background-image: url("../assets/pokemon-left.jpg");
+}
+
+.right {
+  background-image: url("../assets/digimon-right.jpg");
+}
+
+.center {
+  background-color: whitesmoke;
+  color: black;
+  display: flex;
+}
+
+.panelContent {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 7%;
+  gap: 20px;
+  z-index: 2;
+}
+
+.panelContent h2 {
+  color: rgb(223, 15, 15);
+  font-size: 2.8rem;
+  text-shadow: 0 4px 8px rgba(0,0,0,0.6);
+}
+
+.hoverGif {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.55s ease;
+}
+
+.fullpageStrip.left:hover .hoverGif,
+.fullpageStrip.right:hover .hoverGif {
+  opacity: 1;
+}
+
+.favoritesRow {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.favOption {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.panelContent label {
+  display: flex;
+  gap: 8px;
+  margin: 8px 0;
+  padding: 6px 12px;
+  background: rgba(0, 0, 0, 0.05);
+  border-radius: 8px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.25s ease;
+}
+
+.panelContent label:hover {
+  background: rgba(0, 0, 0, 0.12);
+  transform: translateX(4px);
+}
+
+.panelContent input[type="checkbox"] {
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+  accent-color: #ffcc00;
+}
+
+.favoritesCards {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 20px;
+  margin-top: 20px;
+  max-height: 650px;
+  overflow-y: auto;
+  padding-right: 10px;
+}
+
+.favoritesCards::-webkit-scrollbar {
+  width: 8px;
+}
+
+.favoritesCards::-webkit-scrollbar-thumb {
+  background-color: rgba(0,0,0,0.2);
+  border-radius: 4px;
+}
+
+.favoritesCards::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.staticDigimon {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: whitesmoke;
+  padding: 12px;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.staticDigimon:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 18px rgba(0,0,0,0.3);
+}
+
+.aboutPage {
+  position: fixed;
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  text-align: center;
+  color: darkslategray;
+  z-index: 50;
+}
+
+.textoGradiente {
+  background: linear-gradient(to right, #0a3fe0, #9e0606);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-size: 48px;
+  font-weight: bold;
+  display: inline-block;
+  position: sticky;
+  top: 20px; 
+  z-index: 10;
+}
+
+.fullpageStrip {
+  width: 33.33%;
+  position: relative;
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: transform 0.3s ease;
+}
+
+.fullpageStrip:hover {
+  transform: scale(1.03);
+}
+
+.left {
+  background-image: url("../assets/pokemon-left.jpg");
+  background-color: #0a3fe0; 
+}
+
+.right {
+  background-image: url("../assets/digimon-right.jpg");
+  background-color: #d60808;
+}
+
+.left h2 {
+  color: #031c67;
+}
+
+.right h2 {
+  color: #870202; 
+}
+
+
+.panelContent h2 {
+  font-size: 2.5rem;
+  font-weight: 800;
+  margin-bottom: 12px;
+  text-shadow: 0 4px 8px rgba(0,0,0,0.6);
+}
+
+.panelContent button {
+  padding: 10px 24px;
+  font-size: 1.5rem;
+  font-weight: 900;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  background: linear-gradient(to right, #ffcc00, #e1a819);
+  color: #000;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.panelContent button:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 15px rgba(0,0,0,0.4);
+}
+
+.hoverGif {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  pointer-events: none;
+  opacity: 0;
+  border-radius: 0;
+  transition: opacity 0.55s ease;
+}
+
+.fullpageStrip.left:hover .hoverGif,
+.fullpageStrip.right:hover .hoverGif {
+  opacity: 1;
+}
+
