@@ -4,6 +4,12 @@ import { useGetPokemonListQuery } from "../services/pokemonApi";
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 
+// Tipos da API
+interface PokemonListResult {
+  name: string;
+  url: string;
+}
+
 interface PokemonWithImage {
   name: string;
   image: string | null;
@@ -22,13 +28,13 @@ export default function PokemonList() {
     if (!listData) return;
 
     Promise.all(
-      listData.results.map(async (pokemon: any) => {
+      listData.results.map(async (pokemon: PokemonListResult) => {
         const res = await fetch(pokemon.url);
         const data = await res.json();
         return {
           name: data.name,
           image: data.sprites.front_default,
-        };
+        } as PokemonWithImage;
       })
     ).then(setPokemonList);
   }, [listData]);
@@ -132,6 +138,7 @@ export default function PokemonList() {
               {displayedPokemons.length === 0 && (
                 <p className={styles.loadingText}>Nenhum Pokémon encontrado.</p>
               )}
+
               {activeTab === "list" && pokemonList.length > itemsPerPage && (
                 <div style={{ marginTop: "1rem", display: "flex", justifyContent: "center", gap: "1rem" }}>
                   <button
