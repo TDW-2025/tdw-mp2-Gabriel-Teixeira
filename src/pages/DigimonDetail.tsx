@@ -62,7 +62,7 @@ export default function DigimonDetail() {
 
         <img src={digimon.img} alt={digimon.name} className={styles.image} />
 
-        <button className={styles.favButton} onClick={toggleFavorito}>
+        <button  onClick={toggleFavorito}>
           <HeartStraight
             size={34}
             color={favoritos.includes(digimon.name) ? "red" : "#c62a2a"}
