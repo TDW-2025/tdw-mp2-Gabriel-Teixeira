@@ -1,12 +1,13 @@
 import styles from "../styles/PokemonList.module.css";
 import stylesGlobal from "../styles/Global.module.css";
 import { useGetPokemonListQuery } from "../services/pokemonApi";
-import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
 
-import PokemonCard from '../componentes/PokemonCard';
+import PokemonCard from "../componentes/PokemonCard";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 
-// Tipos da API
+import { toggleFavorite, toggleCaught } from "../slices/pokemonSlice";
+
 interface PokemonListResult {
   name: string;
   url: string;
@@ -21,9 +22,14 @@ export default function PokemonList() {
   const { data: listData, isLoading, isError } = useGetPokemonListQuery(200);
   const [pokemonList, setPokemonList] = useState<PokemonWithImage[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const [activeTab, setActiveTab] = useState<"list" | "favorites" | "caught">("list");
-  const [favorites, setFavorites] = useState<string[]>([]);
-  const [caught, setCaught] = useState<string[]>([]);
+  const [activeTab, setActiveTab] =
+    useState<"list" | "favorites" | "caught">("list");
+
+  const [searchTerm, setSearchTerm] = useState("");
+
+  const dispatch = useDispatch();
+  const favorites: string[] = useSelector((state: any) => state.pokemonStatus?.favorites ?? []);
+  const caught: string[] = useSelector((state: any) => state.pokemonStatus?.caught ?? []);
   const itemsPerPage = 25;
 
   useEffect(() => {
@@ -41,32 +47,30 @@ export default function PokemonList() {
     ).then(setPokemonList);
   }, [listData]);
 
-  if (isLoading) return <p className={styles.loadingFallback}>Carregando Pokémon...</p>;
-  if (isError) return <p className={styles.loadingFallback}>Erro ao carregar Pokémon.</p>;
+  const handleToggleFavorite = (name: string) => {
+    dispatch(toggleFavorite(name));
+  };
+
+  const handleToggleCaught = (name: string) => {
+    dispatch(toggleCaught(name));
+  };
+
+  if (isLoading)
+    return <p className={styles.loadingFallback}>Carregando Pokémon...</p>;
+  if (isError)
+    return <p className={styles.loadingFallback}>Erro ao carregar Pokémon.</p>;
 
   const totalPages = Math.ceil(pokemonList.length / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
-  const endIndex = startIndex + itemsPerPage;
-  const currentPokemons = pokemonList.slice(startIndex, endIndex);
-
-  const toggleFavorite = (name: string) => {
-    setFavorites((prev) =>
-      prev.includes(name) ? prev.filter((n) => n !== name) : [...prev, name]
-    );
-  };
-
-  const toggleCaught = (name: string) => {
-    setCaught((prev) =>
-      prev.includes(name) ? prev.filter((n) => n !== name) : [...prev, name]
-    );
-  };
+  const currentPokemons = pokemonList.slice(startIndex, startIndex + itemsPerPage);
 
   const displayedPokemons =
-    activeTab === "list"
+    (activeTab === "list"
       ? currentPokemons
       : activeTab === "favorites"
-        ? pokemonList.filter((p) => favorites.includes(p.name))
-        : pokemonList.filter((p) => caught.includes(p.name));
+      ? pokemonList.filter((p) => favorites.includes(p.name))
+      : pokemonList.filter((p) => caught.includes(p.name))
+    ).filter((p) => p.name.includes(searchTerm.toLowerCase()));
 
   return (
     <div className={stylesGlobal.containerPokemom}>
@@ -84,28 +88,38 @@ export default function PokemonList() {
               <h1 className={styles.title}>Pokédex</h1>
             </div>
 
-            <div style={{ display: "flex", justifyContent: "center", gap: "1rem", marginBottom: "1rem" }}>
+            <div className={styles.tabs}>
               <button
                 className={styles.detailsButton}
-                style={{ backgroundColor: activeTab === "list" ? "#d50000" : "#ff0000" }}
+                style={{ background: activeTab === "list" ? "#d50000" : "#ff0000" }}
                 onClick={() => setActiveTab("list")}
               >
                 Lista
               </button>
+
               <button
                 className={styles.detailsButton}
-                style={{ backgroundColor: activeTab === "favorites" ? "#d50000" : "#ff0000" }}
+                style={{ background: activeTab === "favorites" ? "#d50000" : "#ff0000" }}
                 onClick={() => setActiveTab("favorites")}
               >
                 Favoritos
               </button>
+
               <button
                 className={styles.detailsButton}
-                style={{ backgroundColor: activeTab === "caught" ? "#d50000" : "#ff0000" }}
+                style={{ background: activeTab === "caught" ? "#d50000" : "#ff0000" }}
                 onClick={() => setActiveTab("caught")}
               >
                 Apanhados
               </button>
+              
+            <input
+              type="text"
+              placeholder="Pesquisar Pokémon..."
+              className={styles.searchBar}
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value.toLowerCase())}
+            />
             </div>
 
             <div className={styles.screenContent}>
@@ -117,9 +131,9 @@ export default function PokemonList() {
                     image={p.image}
                     isFavorite={favorites.includes(p.name)}
                     isCaught={caught.includes(p.name)}
-                    onToggleFavorite={toggleFavorite}
-                    onToggleCaught={toggleCaught}
-                    showDetailsButton={activeTab === 'list'}
+                    onToggleFavorite={handleToggleFavorite}
+                    onToggleCaught={handleToggleCaught}
+                    showDetailsButton={activeTab === "list"}
                   />
                 ))}
               </ul>
@@ -129,19 +143,21 @@ export default function PokemonList() {
               )}
 
               {activeTab === "list" && pokemonList.length > itemsPerPage && (
-                <div style={{ marginTop: "1rem", display: "flex", justifyContent: "center", gap: "1rem" }}>
+                <div className={styles.pagination}>
                   <button
                     onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
-                    className={styles.detailsButton}
                     disabled={currentPage === 1}
+                    className={styles.detailsButton}
                   >
                     Anterior
                   </button>
-                  <span>Página {currentPage} de {totalPages}</span>
+                  <span>
+                    Página {currentPage} de {totalPages}
+                  </span>
                   <button
                     onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
-                    className={styles.detailsButton}
                     disabled={currentPage === totalPages}
+                    className={styles.detailsButton}
                   >
                     Próxima
                   </button>
