@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import { toggleFavorite, toggleCaught } from "../slices/pokemonSlice";
+import type { RootState } from "../store/index";
 
 interface PokemonListResult {
   name: string;
@@ -28,8 +29,13 @@ export default function PokemonList() {
   const [searchTerm, setSearchTerm] = useState("");
 
   const dispatch = useDispatch();
-  const favorites: string[] = useSelector((state: any) => state.pokemonStatus?.favorites ?? []);
-  const caught: string[] = useSelector((state: any) => state.pokemonStatus?.caught ?? []);
+  const favorites: string[] = useSelector(
+    (state: RootState) => state.pokemonStatus.favorites ?? []
+  );
+  const caught: string[] = useSelector(
+    (state: RootState) => state.pokemonStatus.caught ?? []
+  );
+
   const itemsPerPage = 25;
 
   useEffect(() => {
@@ -113,13 +119,13 @@ export default function PokemonList() {
                 Apanhados
               </button>
               
-            <input
-              type="text"
-              placeholder="Pesquisar Pokémon..."
-              className={styles.searchBar}
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value.toLowerCase())}
-            />
+              <input
+                type="text"
+                placeholder="Pesquisar Pokémon..."
+                className={styles.searchBar}
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value.toLowerCase())}
+              />
             </div>
 
             <div className={styles.screenContent}>
