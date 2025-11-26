@@ -14,12 +14,40 @@ export const favoritosSlice = createSlice({
   initialState,
   reducers: {
     addFavorito: (state, action: PayloadAction<string>) => {
-      if (!state.items.includes(action.payload)) {
-        state.items.push(action.payload);
+      const name = action.payload;
+
+      console.log("ACTION: addFavorito");
+      console.log("Pokémon recebido:", name);
+      console.log("Lista atual (antes):", [...state.items]);
+
+      if (!state.items.includes(name)) {
+        console.log(`${name} não estava na lista → adicionando`);
+        state.items.push(name);
+      } else {
+        console.log(`⚠️ ${name} já está na lista → nada a fazer`);
       }
+
+      console.log("Lista atualizada (depois):", [...state.items]);
+      console.log("----------------------------------------");
     },
+
     removeFavorito: (state, action: PayloadAction<string>) => {
-      state.items = state.items.filter((name) => name !== action.payload);
+      const name = action.payload;
+
+      console.log("ACTION: removeFavorito");
+      console.log("Pokémon recebido:", name);
+      console.log("Lista atual (antes):", [...state.items]);
+
+      if (state.items.includes(name)) {
+        console.log(`${name} está na lista → removendo`);
+      } else {
+        console.log(`${name} não estava na lista → nada para remover`);
+      }
+
+      state.items = state.items.filter((n) => n !== name);
+
+      console.log("Lista atualizada (depois):", [...state.items]);
+      console.log("----------------------------------------");
     },
   },
 });

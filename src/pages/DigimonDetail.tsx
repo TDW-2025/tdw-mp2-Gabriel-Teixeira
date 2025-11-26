@@ -52,7 +52,7 @@ export default function DigimonDetail() {
   };
 
   return (
-    <div className={stylesGlobal.container}>
+    <div className={stylesGlobal.containerDigimon}>
       <button className={stylesGlobal.backButton} onClick={() => navigate(-1)}>
         ← Voltar
       </button>
