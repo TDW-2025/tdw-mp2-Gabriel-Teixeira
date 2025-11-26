@@ -9,8 +9,6 @@ import type { RootState } from "../store/index";
 import styles from "../styles/PokemonList.module.css";
 import stylesGlobal from "../styles/Global.module.css";
 
-
-
 interface PokemonListResult {
   name: string;
   url: string;
@@ -39,23 +37,33 @@ export default function PokemonList() {
   useEffect(() => {
     if (!listData) return;
 
-    Promise.all(
-      listData.results.map(async (pokemon: PokemonListResult) => {
-        const res = await fetch(pokemon.url);
-        const data = await res.json();
-        return {
-          name: data.name,
-          image: data.sprites.front_default,
-        };
-      })
-    ).then(setPokemonList);
-  }, [listData]);
+    const fetchPokemonImages = async () => {
+      const result = await Promise.all(
+        listData.results.map(async (pokemon: PokemonListResult) => {
+          const res = await fetch(pokemon.url);
+          const data = await res.json();
+          return {
+            name: data.name,
+            image: data.sprites.front_default,
+          };
+        })
+      );
+      setPokemonList(result);
+    };
 
+    fetchPokemonImages();
+  }, [listData]);
 
   const handleToggleFavorite = (name: string) => dispatch(toggleFavorite(name));
   const handleToggleCaught = (name: string) => dispatch(toggleCaught(name));
 
-  useEffect(() => setCurrentPage(1), [activeTab, searchTerm]);
+  // Corrigido: atualiza a página ao mudar tab ou searchTerm
+  useEffect(() => {
+    const resetPage = () => {
+      setCurrentPage(1);
+    };
+    resetPage();
+  }, [activeTab, searchTerm]);
 
   let filteredList =
     activeTab === "list"
@@ -70,18 +78,15 @@ export default function PokemonList() {
 
   const totalPages = Math.ceil(filteredList.length / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
+  const displayedPokemons = filteredList.slice(startIndex, startIndex + itemsPerPage);
 
-  const displayedPokemons = filteredList.slice(
-    startIndex,
-    startIndex + itemsPerPage
-  );
   if (isLoading) return <p className={styles.loadingFallback}>Carregando Pokémon...</p>;
   if (isError) return <p className={styles.loadingFallback}>Erro ao carregar Pokémon.</p>;
-
 
   return (
     <div className={stylesGlobal.containerPokemom}>
       <BackButton type="normal" label="Voltar" />
+
       <div className={styles.pokedex}>
         <div className={styles.pokedexTop}>
           <div className={styles.blueLight} />
@@ -90,11 +95,11 @@ export default function PokemonList() {
 
         <div className={styles.pokedexBody}>
           <div className={styles.sideLeft} />
-
           <div className={styles.screen}>
             <div className={styles.screenHeader}>
               <h1 className={styles.title}>Pokédex</h1>
             </div>
+
             <div className={styles.tabs}>
               <button
                 className={styles.detailsButton}
