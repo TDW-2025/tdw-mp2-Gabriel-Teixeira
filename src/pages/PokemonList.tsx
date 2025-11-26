@@ -1,13 +1,13 @@
-import styles from "../styles/PokemonList.module.css";
-import stylesGlobal from "../styles/Global.module.css";
-import { useGetPokemonListQuery } from "../services/pokemonApi";
-
-import PokemonCard from "../componentes/PokemonCard";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-
+import PokemonCard from "../componentes/PokemonCard";
+import BackButton from "../componentes/BackButton";
+import Pagination from "../componentes/Pagination";
+import { useGetPokemonListQuery } from "../services/pokemonApi";
 import { toggleFavorite, toggleCaught } from "../slices/pokemonSlice";
 import type { RootState } from "../store/index";
+import styles from "../styles/PokemonList.module.css";
+import stylesGlobal from "../styles/Global.module.css";
 
 interface PokemonListResult {
   name: string;
@@ -29,57 +29,64 @@ export default function PokemonList() {
   const [searchTerm, setSearchTerm] = useState("");
 
   const dispatch = useDispatch();
-  const favorites: string[] = useSelector(
-    (state: RootState) => state.pokemonStatus.favorites ?? []
-  );
-  const caught: string[] = useSelector(
-    (state: RootState) => state.pokemonStatus.caught ?? []
-  );
+  const favorites = useSelector((state: RootState) => state.pokemonStatus.favorites ?? []);
+  const caught = useSelector((state: RootState) => state.pokemonStatus.caught ?? []);
 
   const itemsPerPage = 25;
 
   useEffect(() => {
     if (!listData) return;
 
-    Promise.all(
-      listData.results.map(async (pokemon: PokemonListResult) => {
-        const res = await fetch(pokemon.url);
-        const data = await res.json();
-        return {
-          name: data.name,
-          image: data.sprites.front_default,
-        } as PokemonWithImage;
-      })
-    ).then(setPokemonList);
+    const fetchPokemonImages = async () => {
+      const result = await Promise.all(
+        listData.results.map(async (pokemon: PokemonListResult) => {
+          const res = await fetch(pokemon.url);
+          const data = await res.json();
+          return {
+            name: data.name,
+            image: data.sprites.front_default,
+          };
+        })
+      );
+      setPokemonList(result);
+    };
+
+    fetchPokemonImages();
   }, [listData]);
 
-  const handleToggleFavorite = (name: string) => {
-    dispatch(toggleFavorite(name));
-  };
+  const handleToggleFavorite = (name: string) => dispatch(toggleFavorite(name));
+  const handleToggleCaught = (name: string) => dispatch(toggleCaught(name));
 
-  const handleToggleCaught = (name: string) => {
-    dispatch(toggleCaught(name));
-  };
+  // Corrigido: atualiza a página ao mudar tab ou searchTerm
+  useEffect(() => {
+    const resetPage = () => {
+      setCurrentPage(1);
+    };
+    resetPage();
+  }, [activeTab, searchTerm]);
 
-  if (isLoading)
-    return <p className={styles.loadingFallback}>Carregando Pokémon...</p>;
-  if (isError)
-    return <p className={styles.loadingFallback}>Erro ao carregar Pokémon.</p>;
-
-  const totalPages = Math.ceil(pokemonList.length / itemsPerPage);
-  const startIndex = (currentPage - 1) * itemsPerPage;
-  const currentPokemons = pokemonList.slice(startIndex, startIndex + itemsPerPage);
-
-  const displayedPokemons =
-    (activeTab === "list"
-      ? currentPokemons
+  let filteredList =
+    activeTab === "list"
+      ? pokemonList
       : activeTab === "favorites"
       ? pokemonList.filter((p) => favorites.includes(p.name))
-      : pokemonList.filter((p) => caught.includes(p.name))
-    ).filter((p) => p.name.includes(searchTerm.toLowerCase()));
+      : pokemonList.filter((p) => caught.includes(p.name));
+
+  filteredList = filteredList.filter((p) =>
+    p.name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+  const totalPages = Math.ceil(filteredList.length / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const displayedPokemons = filteredList.slice(startIndex, startIndex + itemsPerPage);
+
+  if (isLoading) return <p className={styles.loadingFallback}>Carregando Pokémon...</p>;
+  if (isError) return <p className={styles.loadingFallback}>Erro ao carregar Pokémon.</p>;
 
   return (
     <div className={stylesGlobal.containerPokemom}>
+      <BackButton type="normal" label="Voltar" />
+
       <div className={styles.pokedex}>
         <div className={styles.pokedexTop}>
           <div className={styles.blueLight} />
@@ -88,7 +95,6 @@ export default function PokemonList() {
 
         <div className={styles.pokedexBody}>
           <div className={styles.sideLeft} />
-
           <div className={styles.screen}>
             <div className={styles.screenHeader}>
               <h1 className={styles.title}>Pokédex</h1>
@@ -118,13 +124,19 @@ export default function PokemonList() {
               >
                 Apanhados
               </button>
-              
+
               <input
                 type="text"
                 placeholder="Pesquisar Pokémon..."
                 className={styles.searchBar}
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value.toLowerCase())}
+              />
+
+              <Pagination
+                totalPages={totalPages}
+                currentPage={currentPage}
+                onPageChange={setCurrentPage}
               />
             </div>
 
@@ -146,28 +158,6 @@ export default function PokemonList() {
 
               {displayedPokemons.length === 0 && (
                 <p className={styles.loadingText}>Nenhum Pokémon encontrado.</p>
-              )}
-
-              {activeTab === "list" && pokemonList.length > itemsPerPage && (
-                <div className={styles.pagination}>
-                  <button
-                    onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
-                    disabled={currentPage === 1}
-                    className={styles.detailsButton}
-                  >
-                    Anterior
-                  </button>
-                  <span>
-                    Página {currentPage} de {totalPages}
-                  </span>
-                  <button
-                    onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
-                    disabled={currentPage === totalPages}
-                    className={styles.detailsButton}
-                  >
-                    Próxima
-                  </button>
-                </div>
               )}
             </div>
           </div>
