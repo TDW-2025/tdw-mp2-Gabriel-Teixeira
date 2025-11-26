@@ -1,8 +1,9 @@
 import { useParams } from "react-router-dom";
 import { useGetPokemonByNameQuery } from "../services/pokemonApi";
+import type { Pokemon } from "../types/pokemon";
+import BackButton from "../componentes/BackButton";
 import styles from "../styles/PokemonDetail.module.css";
 import stylesGlobal from "../styles/Global.module.css";
-import type { Pokemon } from "../types/pokemon";
 
 export default function PokemonDetail() {
   const { name } = useParams<{ name: string }>();
@@ -16,6 +17,7 @@ export default function PokemonDetail() {
 
   return (
     <div className={stylesGlobal.containerPokemom}>
+      <BackButton type={pokemon.types[0].type.name} />
       <h1 className={styles.title}>{pokemon.name}</h1>
 
       <div className={styles.card}>
