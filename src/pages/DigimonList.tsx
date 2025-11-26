@@ -32,7 +32,7 @@ export default function DigimonList() {
     .slice(0, 8);
 
   return (
-    <div className={stylesGolbal.container}>
+    <div className={stylesGolbal.containerDigimon}>
       <h1 className={styles.title}>Lista de Digimon</h1>
 
       <div className={styles.searchBox}>
