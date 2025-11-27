@@ -49,8 +49,8 @@
 }
 
 .img {
-  width: 140px;
-  height: 140px;
+  width: 150px; 
+  height: 150px;
   object-fit: contain;
   background: #f0f0f0;
   border-radius: 50%;
@@ -112,14 +112,48 @@
   border-left: 6px solid #ffcb05;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
-.stat p {
+.stat p:first-child {
+    flex-basis: 40%;
     margin: 0;
     font-size: 1rem;
     color: #444;
 }
+.stat p:last-child {
+    flex-basis: 55%;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 0;
+}
+
 .stat strong {
     color: #000;
     font-weight: 700;
+    min-width: 30px; 
+}
+
+.statBar {
+    height: 8px;
+    background: #ccc;
+    border-radius: 4px;
+    flex-grow: 1;
+    position: relative;
+    overflow: hidden;
+}
+
+.statBar::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    background: #4caf50; 
+    border-radius: 4px;
+    transition: width 0.5s ease-out;
+}
+
+.stat p strong + .statBar::after {
+    width: var(--stat-width, 0); 
 }
 
 .abilities h3 {
@@ -181,5 +215,8 @@
     }
     .stats h3, .abilities h3 {
         font-size: 1.4rem;
+    }
+    .stat p:first-child {
+        font-size: 0.9rem;
     }
 }

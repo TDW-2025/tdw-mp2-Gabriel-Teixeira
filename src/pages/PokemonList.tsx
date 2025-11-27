@@ -57,7 +57,6 @@ export default function PokemonList() {
   const handleToggleFavorite = (name: string) => dispatch(toggleFavorite(name));
   const handleToggleCaught = (name: string) => dispatch(toggleCaught(name));
 
-  // Corrigido: atualiza a página ao mudar tab ou searchTerm
   useEffect(() => {
     const resetPage = () => {
       setCurrentPage(1);
