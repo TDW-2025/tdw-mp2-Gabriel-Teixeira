@@ -1,9 +1,8 @@
 .title {
   font-size: 3rem;
   font-weight: 900;
-  color: #FFCB05;
-  text-transform: uppercase;
-  text-shadow: 0 5px 15px rgba(0,0,0,0.8);
+  color: #000000; 
+  text-transform: uppercase; 
   margin-bottom: 2rem;
   text-align: center;
   letter-spacing: 3px;
@@ -13,11 +12,10 @@
   background: #ffffff;
   padding: 3rem;
   border-radius: 1.5rem;
-  box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
   max-width: 900px;
   width: 95%;
   box-sizing: border-box;
-  border: 4px solid #cc0000;
 }
 
 .mainContent {
@@ -30,7 +28,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    border-right: 2px dashed #eee;
+    border-right: 3px solid #ddd;
     padding-right: 2rem;
 }
 
@@ -49,14 +47,13 @@
 }
 
 .img {
-  width: 150px; 
+  width: 150px;
   height: 150px;
   object-fit: contain;
-  background: #f0f0f0;
+  background: #fafafa;
   border-radius: 50%;
   padding: 5px;
-  border: 4px solid #ffcb05;
-  box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+  box-shadow: 0 3px 10px rgba(0,0,0,0.1);
   transition: transform 0.3s;
 }
 
@@ -67,7 +64,7 @@
 .imageInfo p {
   font-size: 1.1rem;
   margin: 0.4rem 0;
-  color: #333;
+  color: #534f4f;
   font-weight: 500;
 }
 .imageInfo strong {
@@ -88,7 +85,7 @@
   border-radius: 20px;
   font-weight: 700;
   text-transform: capitalize;
-  box-shadow: 0 3px 8px rgba(0,0,0,0.3);
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
   transition: background-color 0.3s;
 }
 
@@ -103,14 +100,13 @@
 .stat {
   display: flex;
   justify-content: space-between;
-  background: #f0f0f0;
+  background: #fcfcfc;
   padding: 0.7rem 1.2rem;
   border-radius: 0.7rem;
   margin-bottom: 0.6rem;
   font-weight: 500;
   text-transform: capitalize;
-  border-left: 6px solid #ffcb05;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
 }
 .stat p:first-child {
     flex-basis: 40%;
@@ -129,12 +125,12 @@
 .stat strong {
     color: #000;
     font-weight: 700;
-    min-width: 30px; 
+    min-width: 30px;
 }
 
 .statBar {
     height: 8px;
-    background: #ccc;
+    background: #d6d6d6;
     border-radius: 4px;
     flex-grow: 1;
     position: relative;
@@ -147,13 +143,13 @@
     top: 0;
     left: 0;
     height: 100%;
-    background: #4caf50; 
+    background: #4caf50;
     border-radius: 4px;
     transition: width 0.5s ease-out;
 }
 
 .stat p strong + .statBar::after {
-    width: var(--stat-width, 0); 
+    width: var(--stat-width, 0);
 }
 
 .abilities h3 {
@@ -179,7 +175,7 @@
   border-radius: 25px;
   text-transform: capitalize;
   font-weight: 600;
-  box-shadow: 0 3px 8px rgba(0,0,0,0.2);
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
   transition: opacity 0.3s;
 }
 .ability:hover {
@@ -194,7 +190,7 @@
   .imageInfo {
     padding-right: 0;
     border-right: none;
-    border-bottom: 2px dashed #eee;
+    border-bottom: 1px solid #ddd;
     padding-bottom: 2rem;
   }
   .card {
