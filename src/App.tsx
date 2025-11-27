@@ -4,6 +4,7 @@ import PokemonList from "./pages/PokemonList";
 import PokemonDetail from "./pages/PokemonDetail";
 import DigimonList from "./pages/DigimonList";
 import DigimonDetail from "./pages/DigimonDetail";
+import About from "./pages/About";
 
 export default function App() {
   return (
@@ -12,6 +13,7 @@ export default function App() {
 
       <Route path="/pokemon" element={<PokemonList />} />
       <Route path="/pokemon/:name" element={<PokemonDetail />} />
+      <Route path="/about" element={<About />} />
 
       <Route path="/digimon" element={<DigimonList />} />
       <Route path="/digimon/:name" element={<DigimonDetail />} />

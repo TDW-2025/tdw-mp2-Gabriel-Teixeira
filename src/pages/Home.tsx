@@ -58,14 +58,22 @@ export default function Home() {
                     style={{ width: `${digimonPercentage}%` }}
                 ></div>
             </div>
-
+            
             <p className={styles.voteMessage}>Clique no botão de voto ou no painel para ver a lista!</p>
 
             <div className={styles.voteLinkContainer}>
                 <Link to="/digimon" className={styles.voteLink}>Lista Digimon</Link>
                 <Link to="/pokemon" className={styles.voteLink}>Lista Pokémon</Link>
             </div>
+            
+           
+
         </div>
+         <p className={styles.aboutProject}>
+                <Link to="/about" className={styles.aboutLink}>
+                    Detalhes do Projeto e Tecnologias
+                </Link>
+            </p>
       </div>
 
       <Link 
