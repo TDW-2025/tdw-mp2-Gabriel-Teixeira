@@ -127,7 +127,6 @@
   box-shadow: 0 4px 15px rgba(0,0,0,0.2);
   transition: transform 0.3s ease-out, box-shadow 0.3s ease-out;
   border: 1px solid #ccc;
-  cursor: pointer;
 }
 
 .listItem:hover {
@@ -148,13 +147,14 @@
   text-transform: capitalize;
 }
 
+/* Estilo para os botões da aba (Lista, Favoritos, Apanhados) - Tamanho Maior */
 .detailsButton {
   background: #2196f3;
   color: #fff;
   border: none;
-  padding: 0.5rem 1.2rem; 
+  padding: 0.75rem 1.5rem; 
   border-radius: 30px;
-  font-size: 0.8rem;
+  font-size: 1rem;
   cursor: pointer;
   transition: background 0.2s, transform 0.2s;
   font-weight: 600;
@@ -163,6 +163,73 @@
 .detailsButton:hover {
   background: #1976d2;
   transform: scale(1.05);
+}
+
+/* --- NOVAS CLASSES PARA BOTÕES DENTRO DO CARD --- */
+
+.cardButtonsContainer {
+    display: flex;
+    gap: 0.5rem;
+    justify-content: center;
+    margin-top: 0.75rem;
+}
+
+.cardButton,
+.detailsLinkButton {
+  padding: 0.4rem 0.8rem;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  transition: all 0.2s ease-in-out;
+  flex-grow: 1;
+  text-decoration: none;
+  text-align: center;
+}
+
+.detailsLinkButton {
+    display: block;
+    margin-top: 0.75rem;
+    background: #00bcd4;
+    color: white;
+}
+
+.detailsLinkButton:hover {
+    background: #0097a7;
+    transform: translateY(-1px) scale(1.01);
+}
+
+.favoriteInactive {
+    background: #fbc02d;
+    color: #333;
+}
+.favoriteInactive:hover {
+    background: #f9a825;
+}
+
+.favoriteActive {
+    background: #f57f17;
+    color: white;
+}
+.favoriteActive:hover {
+    background: #e65100;
+}
+
+.caughtInactive {
+    background: #4caf50;
+    color: white;
+}
+.caughtInactive:hover {
+    background: #388e3c;
+}
+
+.caughtActive {
+    background: #2e7d32;
+    color: white;
+}
+.caughtActive:hover {
+    background: #1b5e20;
 }
 
 .loadingFallback,

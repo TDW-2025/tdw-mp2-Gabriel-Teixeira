@@ -136,11 +136,6 @@ useEffect(() => {
                 onChange={(e) => setSearchTerm(e.target.value.toLowerCase())}
               />
 
-              <Pagination
-                totalPages={totalPages}
-                currentPage={currentPage}
-                onPageChange={setCurrentPage}
-              />
             </div>
 
             <div className={styles.screenContent}>
@@ -162,8 +157,15 @@ useEffect(() => {
               {displayedPokemons.length === 0 && (
                 <p className={styles.loadingText}>Nenhum Pokémon encontrado.</p>
               )}
+              <Pagination
+                totalPages={totalPages}
+                currentPage={currentPage}
+                onPageChange={setCurrentPage}
+              />
             </div>
+            
           </div>
+          
 
           <div className={styles.sideRight} />
         </div>
