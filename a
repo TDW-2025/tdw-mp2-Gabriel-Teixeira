@@ -1,0 +1,840 @@
+import { useParams } from "react-router-dom";
+import { useGetPokemonByNameQuery } from "../services/pokemonApi";
+import type { Pokemon } from "../types/pokemon";
+import BackButton from "../componentes/BackButton";
+import styles from "../styles/PokemonDetail.module.css";
+import stylesGlobal from "../styles/Global.module.css";
+
+// Mapeamento de nomes de stats da API para Português
+const statNameMap: { [key: string]: string } = {
+  hp: "HP",
+  attack: "Ataque",
+  defense: "Defesa",
+  "special-attack": "Atq. Especial",
+  "special-defense": "Def. Especial",
+  speed: "Velocidade",
+};
+
+export default function PokemonDetail() {
+  const { name } = useParams<{ name: string }>();
+  const { data, isLoading, isError } = useGetPokemonByNameQuery(name!); 
+
+  if (isLoading) return <p style={{ textAlign: "center" }}>Carregando...</p>;
+  if (isError || !data)
+    return <p style={{ textAlign: "center" }}>Erro ao carregar Pokémon</p>;
+
+  const pokemon: Pokemon = data;
+
+  // Tenta obter o sprite animado, senão usa o estático padrão. 
+  // O resultado ainda pode ser 'string | null'.
+  const animatedSprite = 
+    pokemon.sprites.versions?.['generation-v']?.['black-white']?.animated?.front_default 
+    || pokemon.sprites.front_default;
+
+  return (
+    <div className={stylesGlobal.containerPokemom}>
+      <BackButton type={pokemon.types[0].type.name} label="Voltar" /> 
+      <h1 className={styles.title}>{pokemon.name}</h1>
+
+      <div className={styles.card}>
+        <div className={styles.mainContent}>
+          <div className={styles.imageInfo}>
+            <div className={styles.images}>
+              {/* CORREÇÃO 1: Usa o operador '?? undefined' para garantir que null se torne undefined */}
+              <img 
+                src={animatedSprite ?? undefined} 
+                alt={`${pokemon.name} frente`} 
+                className={`${styles.img} ${styles.animatedImg}`} 
+              />
+              
+              {/* CORREÇÃO 2: Aplica a mesma lógica para o sprite traseiro estático */}
+              <img 
+                src={pokemon.sprites.back_default ?? undefined} 
+                alt={`${pokemon.name} trás`} 
+                className={styles.img} 
+              />
+            </div>
+
+            <p><strong>Número:</strong> #{pokemon.id}</p>
+            <p><strong>Altura:</strong> {pokemon.height / 10} m</p>
+            <p><strong>Peso:</strong> {pokemon.weight / 10} kg</p>
+
+            <div className={styles.types}>
+              {pokemon.types.map((t) => (
+                <span key={t.type.name} className={styles.type}>
+                  {t.type.name}
+                </span>
+              ))}
+            </div>
+          </div>
+          
+          <div className={styles.statsAbilities}> 
+            
+            <div className={styles.stats}>
+              <h3>Estatísticas Base</h3>
+              {pokemon.stats.map((s) => (
+                <div key={s.stat.name} className={styles.stat}>
+                  <p>{statNameMap[s.stat.name] || s.stat.name}:</p>
+                  <p>
+                    <strong>{s.base_stat}</strong>
+                    <span 
+                      className={styles.statBar} 
+                      style={{ '--stat-width': `${(s.base_stat / 255) * 100}%` } as React.CSSProperties}
+                    ></span>
+                  </p>
+                </div>
+              ))}
+            </div>
+
+            <div className={styles.abilities}>
+              <h3>Habilidades</h3>
+              <div className={styles.abilityList}>
+                {pokemon.abilities.map((a) => (
+                  <span key={a.ability.name} className={styles.ability}>
+                    {a.ability.name} {a.is_hidden && '(Secreta)'}
+                  </span>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+// Importações de componentes assumidas
+import PokemonCard from "../componentes/PokemonCard";
+import BackButton from "../componentes/BackButton";
+import Pagination from "../componentes/Pagination";
+// Importações de serviços e slices assumidas
+import { useGetPokemonListQuery } from "../services/pokemonApi";
+import { toggleFavorite, toggleCaught } from "../slices/pokemonSlice";
+import type { RootState } from "../store/index";
+// Importações de estilos
+import styles from "../styles/PokemonList.module.css";
+import stylesGlobal from "../styles/Global.module.css";
+
+interface PokemonListResult {
+  name: string;
+  url: string;
+}
+
+interface PokemonWithImage {
+  name: string;
+  image: string | null;
+}
+
+export default function PokemonList() {
+  const { data: listData, isLoading, isError } = useGetPokemonListQuery(1000); 
+  const [pokemonList, setPokemonList] = useState<PokemonWithImage[]>([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [activeTab, setActiveTab] =
+    useState<"list" | "favorites" | "caught">("list");
+
+  const [searchTerm, setSearchTerm] = useState("");
+
+  const dispatch = useDispatch();
+  const favorites = useSelector((state: RootState) => state.pokemonStatus.favorites ?? []);
+  const caught = useSelector((state: RootState) => state.pokemonStatus.caught ?? []);
+
+  const itemsPerPage = 25;
+
+  useEffect(() => {
+    if (!listData) return;
+
+    const fetchPokemonImages = async () => {
+      const result = await Promise.all(
+        listData.results.map(async (pokemon: PokemonListResult) => {
+          const res = await fetch(pokemon.url);
+          const data = await res.json();
+          
+          const animatedSprite = 
+            data.sprites.versions?.['generation-v']?.['black-white']?.animated?.front_default;
+
+          return {
+            name: data.name,
+            image: animatedSprite || data.sprites.front_default,
+          };
+        })
+      );
+      setPokemonList(result);
+    };
+
+    fetchPokemonImages();
+  }, [listData]);
+
+  const handleToggleFavorite = (name: string) => dispatch(toggleFavorite(name));
+  const handleToggleCaught = (name: string) => dispatch(toggleCaught(name));
+
+  const handleSetActiveTab = (tab: "list" | "favorites" | "caught") => {
+      setActiveTab(tab);
+      setCurrentPage(1);
+  };
+  
+  const handleSearchChange = (value: string) => {
+      setSearchTerm(value);
+      setCurrentPage(1);
+  };
+
+  let filteredList =
+    activeTab === "list"
+      ? pokemonList
+      : activeTab === "favorites"
+      ? pokemonList.filter((p) => favorites.includes(p.name))
+      : pokemonList.filter((p) => caught.includes(p.name));
+
+  filteredList = filteredList.filter((p) =>
+    p.name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+  const totalPages = Math.ceil(filteredList.length / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const displayedPokemons = filteredList.slice(startIndex, startIndex + itemsPerPage);
+
+  if (isLoading) return <p className={styles.loadingFallback}>Carregando Pokémon...</p>;
+  if (isError) return <p className={styles.loadingFallback}>Erro ao carregar Pokémon.</p>;
+
+  return (
+    <div className={stylesGlobal.containerPokemom}>
+      <BackButton type="normal" label="Voltar" />
+
+      <div className={styles.pokedex}>
+        <div className={styles.pokedexTop}>
+          <div className={styles.blueLight} />
+          <div className={styles.topRightGadgets}>
+            <div style={{ background: '#ffeb3b' }} /> 
+            <div style={{ background: '#4caf50' }} /> 
+            <div style={{ background: '#f44336' }} /> 
+          </div>
+        </div>
+
+        <div className={styles.pokedexBody}>
+          <div className={styles.sideLeft} />
+          <div className={styles.screen}>
+            <div className={styles.screenHeader}>
+              <h1 className={styles.title}>Pokédex</h1>
+            </div>
+
+            <div className={styles.tabs}>
+              <div className={styles.tabsButtons}>
+                <button
+                  className={styles.detailsButton}
+                  style={{ background: activeTab === "list" ? "#a32424" : "#d32f2f" }}
+                  onClick={() => handleSetActiveTab("list")}
+                >
+                  Lista
+                </button>
+
+                <button
+                  className={styles.detailsButton}
+                  style={{ background: activeTab === "favorites" ? "#a32424" : "#d32f2f" }}
+                  onClick={() => handleSetActiveTab("favorites")}
+                >
+                  Favoritos ({favorites.length})
+                </button>
+
+                <button
+                  className={styles.detailsButton}
+                  style={{ background: activeTab === "caught" ? "#a32424" : "#d32f2f" }}
+                  onClick={() => handleSetActiveTab("caught")}
+                >
+                  Apanhados ({caught.length})
+                </button>
+              </div>
+
+              <input
+                type="text"
+                placeholder="Pesquisar Pokémon..."
+                className={styles.searchBar}
+                value={searchTerm}
+                onChange={(e) => handleSearchChange(e.target.value)}
+              />
+              
+              <Pagination
+                totalPages={totalPages}
+                currentPage={currentPage}
+                onPageChange={setCurrentPage}
+              />
+            </div>
+
+            <div className={styles.screenContent}>
+              <ul className={styles.list}>
+                {displayedPokemons.map((p) => (
+                  <PokemonCard
+                    key={p.name}
+                    name={p.name}
+                    image={p.image}
+                    isFavorite={favorites.includes(p.name)}
+                    isCaught={caught.includes(p.name)}
+                    onToggleFavorite={handleToggleFavorite}
+                    onToggleCaught={handleToggleCaught}
+                    showDetailsButton={true} 
+                  />
+                ))}
+              </ul>
+
+              {displayedPokemons.length === 0 && (
+                <p className={styles.loadingText}>Nenhum Pokémon encontrado.</p>
+              )}
+            </div>
+          </div>
+
+          <div className={styles.sideRight} />
+        </div>
+
+        <div className={styles.pokedexBottom}>
+          <div className={styles.bottomButton} />
+          <div className={styles.bottomGrille} />
+        </div>
+      </div>
+    </div>
+  );
+}.title {
+  font-size: 3rem;
+  font-weight: 900;
+  color: #FFCB05;
+  text-transform: uppercase;
+  text-shadow: 0 5px 15px rgba(0,0,0,0.8);
+  margin-bottom: 2rem;
+  text-align: center;
+  letter-spacing: 3px;
+}
+
+.card {
+  background: #ffffff;
+  padding: 3rem;
+  border-radius: 1.5rem;
+  box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+  max-width: 900px;
+  width: 95%;
+  box-sizing: border-box;
+  border: 4px solid #cc0000;
+}
+
+.mainContent {
+    display: flex;
+    gap: 3rem;
+}
+
+.imageInfo {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border-right: 2px dashed #eee;
+    padding-right: 2rem;
+}
+
+.statsAbilities {
+    flex: 1.5;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.images {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+.img {
+  /* Tamanho ligeiramente maior para sprites animados */
+  width: 150px; 
+  height: 150px;
+  object-fit: contain;
+  background: #f0f0f0;
+  border-radius: 50%;
+  padding: 5px;
+  border: 4px solid #ffcb05;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+  transition: transform 0.3s;
+}
+
+.img:hover {
+    transform: scale(1.05);
+}
+
+.imageInfo p {
+  font-size: 1.1rem;
+  margin: 0.4rem 0;
+  color: #333;
+  font-weight: 500;
+}
+.imageInfo strong {
+    font-weight: 700;
+    color: #cc0000;
+}
+
+.types {
+  display: flex;
+  gap: 0.75rem;
+  margin: 1.5rem 0 0 0;
+}
+
+.type {
+  background-color: #42a5f5;
+  color: #fff;
+  padding: 0.4rem 1rem;
+  border-radius: 20px;
+  font-weight: 700;
+  text-transform: capitalize;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.3);
+  transition: background-color 0.3s;
+}
+
+.stats h3 {
+  font-size: 1.6rem;
+  text-align: center;
+  margin-bottom: 1.5rem;
+  color: #cc0000;
+  font-weight: 800;
+}
+
+.stat {
+  display: flex;
+  justify-content: space-between;
+  background: #f0f0f0;
+  padding: 0.7rem 1.2rem;
+  border-radius: 0.7rem;
+  margin-bottom: 0.6rem;
+  font-weight: 500;
+  text-transform: capitalize;
+  border-left: 6px solid #ffcb05;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+.stat p:first-child {
+    flex-basis: 40%;
+    margin: 0;
+    font-size: 1rem;
+    color: #444;
+}
+.stat p:last-child {
+    flex-basis: 55%;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 0;
+}
+
+.stat strong {
+    color: #000;
+    font-weight: 700;
+    min-width: 30px; /* Garante que o número fique visível */
+}
+
+/* NOVO: ESTILOS PARA A BARRA DE PROGRESSO DAS ESTATÍSTICAS */
+.statBar {
+    height: 8px;
+    background: #ccc;
+    border-radius: 4px;
+    flex-grow: 1;
+    position: relative;
+    overflow: hidden;
+}
+
+.statBar::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    /* Cor de preenchimento, pode ser ajustada por tipo ou stat */
+    background: #4caf50; 
+    border-radius: 4px;
+    transition: width 0.5s ease-out;
+}
+
+.stat p strong + .statBar::after {
+    /* Define a largura da barra baseada no 'style' do componente React */
+    width: var(--stat-width, 0); 
+}
+/* FIM DOS NOVOS ESTILOS */
+
+.abilities h3 {
+  font-size: 1.6rem;
+  text-align: center;
+  margin-bottom: 1.5rem;
+  color: #1976d2;
+  font-weight: 800;
+}
+
+.abilityList {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+    padding: 0 1rem;
+}
+
+.ability {
+  background: #29b6f6;
+  color: #fff;
+  padding: 0.5rem 1rem;
+  border-radius: 25px;
+  text-transform: capitalize;
+  font-weight: 600;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.2);
+  transition: opacity 0.3s;
+}
+.ability:hover {
+    opacity: 0.8;
+}
+
+@media (max-width: 850px) {
+  .mainContent {
+    flex-direction: column;
+    gap: 2rem;
+  }
+  .imageInfo {
+    padding-right: 0;
+    border-right: none;
+    border-bottom: 2px dashed #eee;
+    padding-bottom: 2rem;
+  }
+  .card {
+    padding: 1.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+    .title {
+        font-size: 2rem;
+    }
+    .img {
+        width: 100px;
+        height: 100px;
+    }
+    .images {
+        gap: 0;
+    }
+    .stats h3, .abilities h3 {
+        font-size: 1.4rem;
+    }
+    .stat p:first-child {
+        font-size: 0.9rem;
+    }
+}.pokedex {
+  width: 95%;
+  max-width: 1100px;
+  margin: 30px auto;
+  background: #212121;
+  border-radius: 2rem;
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5), inset 0 0 0 8px #d32f2f;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  font-family: 'Arial', sans-serif;
+}
+
+.pokedexTop {
+  height: 70px;
+  background: #d32f2f;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 1.5rem;
+  position: relative;
+  border-bottom: 5px solid #a32424;
+}
+
+.blueLight {
+  width: 30px;
+  height: 30px;
+  background: radial-gradient(circle, #42a5f5 10%, #0d47a1 90%);
+  border-radius: 50%;
+  box-shadow: 0 0 15px #42a5f5, inset 0 0 5px rgba(255, 255, 255, 0.7);
+}
+
+.topRightGadgets {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.topRightGadgets > div {
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    background: #444; 
+    box-shadow: inset 0 0 5px #000;
+}
+
+.pokedexBody {
+  display: flex;
+  background: #e0e0e0;
+  min-height: 700px; 
+  padding: 1.5rem; 
+  box-sizing: border-box; 
+  gap: 1.5rem;
+}
+
+.sideLeft,
+.sideRight {
+  width: 40px;
+  background: #bdbdbd;
+  border-radius: 5px;
+  box-shadow: inset 0 0 8px rgba(0, 0, 0, 0.2);
+  flex-shrink: 0;
+}
+
+.screen {
+  flex: 1;
+  padding: 2rem; 
+  display: flex;
+  flex-direction: column;
+  background: #dff0e5;
+  border-radius: 0.5rem;
+  box-shadow: inset 0 0 15px rgba(0,0,0,0.4);
+  max-height: 670px;
+  overflow-y: auto; 
+  overflow-x: hidden;
+  border: 4px solid #333;
+}
+
+.screenHeader {
+  margin-bottom: 1.5rem; 
+  text-align: center;
+  padding-bottom: 10px;
+  border-bottom: 2px solid rgba(0, 0, 0, 0.1);
+}
+
+.title {
+  font-size: 2.5rem;
+  font-weight: 900;
+  color: #333;
+  text-shadow: 2px 2px 5px rgba(255, 255, 255, 0.8);
+  margin: 0;
+  letter-spacing: 1px;
+}
+
+.screenContent {
+  flex: 1;
+  overflow-y: auto; 
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  padding-right: 10px;
+}
+
+.screenContent::-webkit-scrollbar {
+    width: 8px;
+}
+
+.screenContent::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 0, 0, 0.3);
+    border-radius: 4px;
+}
+
+.list {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); 
+  gap: 1.5rem; 
+  padding: 0;
+  list-style: none;
+  width: 100%;
+}
+
+.listItem {
+  background: #fff;
+  border-radius: 12px;
+  padding: 0.75rem; 
+  text-align: center;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+  transition: transform 0.3s ease-out, box-shadow 0.3s ease-out;
+  border: 1px solid #ccc;
+  cursor: pointer;
+}
+
+.listItem:hover {
+  transform: translateY(-8px) scale(1.03);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+}
+
+.img {
+  width: 90px;
+  height: 90px; 
+  object-fit: contain;
+}
+
+.name {
+  margin: 0.75rem 0 0.5rem;
+  font-weight: 700;
+  color: #222;
+  text-transform: capitalize;
+}
+
+.detailsButton {
+  background: #2196f3;
+  color: #fff;
+  border: none;
+  padding: 0.5rem 1.2rem; 
+  border-radius: 30px;
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.2s;
+  font-weight: 600;
+}
+
+.detailsButton:hover {
+  background: #1976d2;
+  transform: scale(1.05);
+}
+
+.loadingFallback,
+.loadingText {
+  font-size: 1.5rem;
+  color: #555;
+  margin-top: 5rem;
+  text-align: center;
+  font-weight: 600;
+}
+
+.pokedexBottom {
+  height: 100px;
+  background: #d32f2f;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 3rem;
+  border-top: 5px solid #a32424;
+}
+
+.bottomButton {
+  width: 35px;
+  height: 35px;
+  background: #333;
+  border-radius: 50%;
+  box-shadow: inset 0 0 8px rgba(0, 0, 0, 0.7);
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.bottomButton:hover {
+    background: #444;
+}
+
+.bottomGrille {
+  width: 120px;
+  height: 6px;
+  background: #000;
+  border-radius: 3px;
+  position: relative;
+  box-shadow: inset 0 0 3px rgba(255, 255, 255, 0.5);
+}
+
+.tabs {
+  width: 100%;
+  display: flex;
+  justify-content: space-between; 
+  align-items: center;
+  margin-bottom: 1rem;
+  flex-wrap: wrap; 
+  gap: 0.5rem;
+}
+
+.tabsButtons {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.searchBar {
+  width: 250px;
+  padding: 0.6rem 1.2rem;
+  border-radius: 30px;
+  border: 3px solid #ff0000;
+  background: #fff;
+  font-size: 1rem;
+  color: #333;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.4rem;
+  margin: 1rem 0 0.5rem;
+  flex-wrap: wrap;
+}
+
+.pagination button {
+  padding: 0.5rem 1rem; 
+  border-radius: 8px; 
+  border: none;
+  background: #ff0000;
+  color: white;
+  cursor: pointer;
+  font-size: 1.4rem; 
+  font-weight: bold;
+  transition: 0.2s ease-in-out;
+  min-width: 40px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+}
+
+.pagination button:hover:not(:disabled) {
+  background: #d50000;
+  transform: translateY(-1px) scale(1.03);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+}
+
+.pagination button:disabled {
+  background: #ccc;
+  opacity: 0.6;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+.paginationDots {
+  font-size: 1rem;
+  padding: 0 5px;
+  color: #777;
+  user-select: none;
+}
+
+
+@media (max-width: 992px) {
+  .list {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+    .pokedexBody {
+        flex-direction: column;
+        padding: 1rem;
+        gap: 1rem;
+    }
+
+    .sideLeft, .sideRight {
+        display: none;
+    }
+
+    .screen {
+        max-height: 500px;
+    }
+
+    .list {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .searchBar {
+        width: 100%;
+    }
+    
+    .tabs {
+        flex-direction: column;
+        gap: 1rem;
+        align-items: flex-start;
+    }
+    
+    .pokedexBottom {
+        padding: 0 1rem;
+        height: 80px;
+    }
+}

@@ -33,8 +33,7 @@ export default function PokemonList() {
   const caught = useSelector((state: RootState) => state.pokemonStatus.caught ?? []);
 
   const itemsPerPage = 25;
-
-  useEffect(() => {
+useEffect(() => {
     if (!listData) return;
 
     const fetchPokemonImages = async () => {
@@ -42,9 +41,14 @@ export default function PokemonList() {
         listData.results.map(async (pokemon: PokemonListResult) => {
           const res = await fetch(pokemon.url);
           const data = await res.json();
+          
+          const animatedSprite =
+            data.sprites.versions?.["generation-v"]?.["black-white"]?.animated
+              ?.front_default;
+
           return {
             name: data.name,
-            image: data.sprites.front_default,
+            image: animatedSprite || data.sprites.front_default,
           };
         })
       );
