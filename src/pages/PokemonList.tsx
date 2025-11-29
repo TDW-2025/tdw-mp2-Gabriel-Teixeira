@@ -1,85 +1,131 @@
-import styles from "../styles/PokemonList.module.css";
-import stylesGlobal from "../styles/Global.module.css";
-import { useGetPokemonListQuery } from "../services/pokemonApi";
-
-import PokemonCard from "../componentes/PokemonCard";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-
+import PokemonCard from "../componentes/PokemonCard";
+import BackButton from "../componentes/BackButton";
+import Pagination from "../componentes/Pagination";
+import { useGetPokemonListQuery } from "../services/pokemonApi";
 import { toggleFavorite, toggleCaught } from "../slices/pokemonSlice";
 import type { RootState } from "../store/index";
+import styles from "../styles/PokemonList.module.css";
+import stylesGlobal from "../styles/Global.module.css";
 
 interface PokemonListResult {
   name: string;
   url: string;
 }
 
+// NOVO: Interface para tipar o objeto dentro do array de tipos
+interface PokemonTypeInfo {
+  slot: number;
+  type: {
+    name: string; // O nome do tipo (ex: 'grass', 'poison')
+    url: string;
+  };
+}
+
 interface PokemonWithImage {
   name: string;
   image: string | null;
+  types: string[]; // Adicionado: Array de tipos
 }
 
+// Lista fixa dos tipos de Pokémon
+const pokemonTypes = [
+  "normal", "fire", "water", "grass", "electric", "ice", "fighting",
+  "poison", "ground", "flying", "psychic", "bug", "rock", "ghost",
+  "dragon", "steel", "dark", "fairy"
+];
+
 export default function PokemonList() {
-  const { data: listData, isLoading, isError } = useGetPokemonListQuery(200);
+  // --- Estado e Hooks ---
+  const { data: listData, isLoading, isError } = useGetPokemonListQuery(200); // Busca até 200 Pokémon
   const [pokemonList, setPokemonList] = useState<PokemonWithImage[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [activeTab, setActiveTab] =
     useState<"list" | "favorites" | "caught">("list");
-
   const [searchTerm, setSearchTerm] = useState("");
+  const [activeType, setActiveType] = useState<string>("all"); // NOVO ESTADO: Tipo ativo
 
   const dispatch = useDispatch();
-  const favorites: string[] = useSelector(
-    (state: RootState) => state.pokemonStatus.favorites ?? []
-  );
-  const caught: string[] = useSelector(
-    (state: RootState) => state.pokemonStatus.caught ?? []
-  );
+  const favorites = useSelector((state: RootState) => state.pokemonStatus.favorites ?? []);
+  const caught = useSelector((state: RootState) => state.pokemonStatus.caught ?? []);
 
   const itemsPerPage = 25;
 
+  // --- Efeito para Buscar Detalhes e Imagens (Incluindo Tipos) ---
   useEffect(() => {
     if (!listData) return;
 
-    Promise.all(
-      listData.results.map(async (pokemon: PokemonListResult) => {
-        const res = await fetch(pokemon.url);
-        const data = await res.json();
-        return {
-          name: data.name,
-          image: data.sprites.front_default,
-        } as PokemonWithImage;
-      })
-    ).then(setPokemonList);
+    const fetchPokemonDetails = async () => {
+      const result = await Promise.all(
+        listData.results.map(async (pokemon: PokemonListResult) => {
+          const res = await fetch(pokemon.url);
+          const data = await res.json();
+          
+          const animatedSprite =
+            data.sprites.versions?.["generation-v"]?.["black-white"]?.animated
+              ?.front_default;
+          
+          // Mapeia os tipos (CORRIGIDO: usando PokemonTypeInfo)
+          const types = data.types.map((typeInfo: PokemonTypeInfo) => typeInfo.type.name); 
+
+          return {
+            name: data.name,
+            image: animatedSprite || data.sprites.front_default,
+            types: types, // Inclui os tipos
+          };
+        })
+      );
+      setPokemonList(result);
+    };
+
+    fetchPokemonDetails();
   }, [listData]);
 
-  const handleToggleFavorite = (name: string) => {
-    dispatch(toggleFavorite(name));
-  };
+  // --- Handlers de Ação ---
+  const handleToggleFavorite = (name: string) => dispatch(toggleFavorite(name));
+  const handleToggleCaught = (name: string) => dispatch(toggleCaught(name));
 
-  const handleToggleCaught = (name: string) => {
-    dispatch(toggleCaught(name));
-  };
+  // --- Efeito para Resetar a Paginação ao Mudar Filtros/Tabs ---
+  useEffect(() => {
+    const resetPage = () => {
+      setCurrentPage(1);
+    };
+    resetPage();
+  }, [activeTab, searchTerm, activeType]); // Dependências: Tab, Pesquisa, Tipo
 
-  if (isLoading)
-    return <p className={styles.loadingFallback}>Carregando Pokémon...</p>;
-  if (isError)
-    return <p className={styles.loadingFallback}>Erro ao carregar Pokémon.</p>;
-
-  const totalPages = Math.ceil(pokemonList.length / itemsPerPage);
-  const startIndex = (currentPage - 1) * itemsPerPage;
-  const currentPokemons = pokemonList.slice(startIndex, startIndex + itemsPerPage);
-
-  const displayedPokemons =
-    (activeTab === "list"
-      ? currentPokemons
+  // --- Lógica de Filtragem ---
+  
+  // 1. Filtragem por Tab (Lista, Favoritos, Apanhados)
+  let filteredList =
+    activeTab === "list"
+      ? pokemonList
       : activeTab === "favorites"
       ? pokemonList.filter((p) => favorites.includes(p.name))
-      : pokemonList.filter((p) => caught.includes(p.name))
-    ).filter((p) => p.name.includes(searchTerm.toLowerCase()));
+      : pokemonList.filter((p) => caught.includes(p.name));
 
+  filteredList = filteredList.filter((p) =>
+    p.name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+  
+  if (activeType !== "all") {
+    filteredList = filteredList.filter((p) => p.types.includes(activeType));
+  }
+
+  // --- Lógica de Paginação ---
+  const totalPages = Math.ceil(filteredList.length / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const displayedPokemons = filteredList.slice(startIndex, startIndex + itemsPerPage);
+
+  // --- Exibição de Carregamento/Erro ---
+  if (isLoading) return <p className={styles.loadingFallback}>Carregando Pokémon...</p>;
+  if (isError) return <p className={styles.loadingFallback}>Erro ao carregar Pokémon.</p>;
+
+  // --- Renderização ---
   return (
     <div className={stylesGlobal.containerPokemom}>
+      <BackButton type="normal" label="Voltar" />
+
       <div className={styles.pokedex}>
         <div className={styles.pokedexTop}>
           <div className={styles.blueLight} />
@@ -88,12 +134,12 @@ export default function PokemonList() {
 
         <div className={styles.pokedexBody}>
           <div className={styles.sideLeft} />
-
           <div className={styles.screen}>
             <div className={styles.screenHeader}>
               <h1 className={styles.title}>Pokédex</h1>
             </div>
 
+            {/* SEÇÃO DE FILTROS E TABS */}
             <div className={styles.tabs}>
               <button
                 className={styles.detailsButton}
@@ -108,7 +154,7 @@ export default function PokemonList() {
                 style={{ background: activeTab === "favorites" ? "#d50000" : "#ff0000" }}
                 onClick={() => setActiveTab("favorites")}
               >
-                Favoritos
+                Favoritos ({favorites.length})
               </button>
 
               <button
@@ -116,7 +162,7 @@ export default function PokemonList() {
                 style={{ background: activeTab === "caught" ? "#d50000" : "#ff0000" }}
                 onClick={() => setActiveTab("caught")}
               >
-                Apanhados
+                Apanhados ({caught.length})
               </button>
               
               <input
@@ -124,8 +170,24 @@ export default function PokemonList() {
                 placeholder="Pesquisar Pokémon..."
                 className={styles.searchBar}
                 value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value.toLowerCase())}
+                onChange={(e) => setSearchTerm(e.target.value)}
               />
+
+              {/* SELECT PARA FILTRAR POR TIPO */}
+              <select
+                className={styles.typeFilter} 
+                value={activeType}
+                onChange={(e) => setActiveType(e.target.value)}
+              >
+                <option value="all">Todos os Tipos</option>
+                {pokemonTypes.map((type) => (
+                  <option key={type} value={type}>
+                    {type.charAt(0).toUpperCase() + type.slice(1)}
+                  </option>
+                ))}
+              </select>
+              {/* FIM DO SELECT */}
+
             </div>
 
             <div className={styles.screenContent}>
@@ -145,32 +207,20 @@ export default function PokemonList() {
               </ul>
 
               {displayedPokemons.length === 0 && (
-                <p className={styles.loadingText}>Nenhum Pokémon encontrado.</p>
+                <p className={styles.loadingText}>
+                  Nenhum Pokémon encontrado com os filtros aplicados.
+                </p>
               )}
-
-              {activeTab === "list" && pokemonList.length > itemsPerPage && (
-                <div className={styles.pagination}>
-                  <button
-                    onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
-                    disabled={currentPage === 1}
-                    className={styles.detailsButton}
-                  >
-                    Anterior
-                  </button>
-                  <span>
-                    Página {currentPage} de {totalPages}
-                  </span>
-                  <button
-                    onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
-                    disabled={currentPage === totalPages}
-                    className={styles.detailsButton}
-                  >
-                    Próxima
-                  </button>
-                </div>
-              )}
+              
+              <Pagination
+                totalPages={totalPages}
+                currentPage={currentPage}
+                onPageChange={setCurrentPage}
+              />
             </div>
+            
           </div>
+          
 
           <div className={styles.sideRight} />
         </div>
