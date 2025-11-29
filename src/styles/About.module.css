@@ -1,187 +1,269 @@
+html, body {
+  height: 100%;
+  margin: 0;
+  width: 100%;
+  overflow-x: hidden;
+}
+
 :root {
-    --primary-color: #3b82f6; 
-    --secondary-color: #f43f5e;
-    --background-dark-overlay: rgba(0, 0, 0, 0.5); 
-    --text-dark: #1f2937;
-    --text-highlight: #9f1239;
+  --primary-color: #3b82f6;
+  --secondary-color: #f43f5e;
+  --highlight-color: #ffcc00;
+  --background-dark-overlay: rgba(0, 0, 0, 0.65);
+  --text-dark: #1f2937;
+  --text-light: #ffffff;
+  --text-secondary: #4b5563;
+  --shadow-light: 0 4px 12px rgba(0, 0, 0, 0.15);
+  --glow: 0 0 15px var(--highlight-color);
 }
 
 .container {
-    background-image: var(--background-image); 
-    background-size: cover;
-    background-position: center;
-    background-attachment: fixed; 
-    min-height: 100vh;
-    padding: 40px 20px;
-    display: flex;
-    justify-content: center;
-    align-items: flex-start;
-    position: relative;
-    z-index: 1;
+  background-image: var(--background-image);
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  
+  height: 100vh;
+  width: 100vw;
+  min-height: 100vh;
+  overflow: hidden;
+  
+  padding: 40px 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
 }
 
 .container::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: var(--background-dark-overlay); 
-    z-index: 2;
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-color: var(--background-dark-overlay);
+  z-index: 2;
 }
 
 .contentBox {
-    max-width: 900px;
-    width: 100%;
-    background-color: rgba(255, 255, 255, 0.98); 
-    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3), 0 10px 10px -5px rgba(0, 0, 0, 0.1);
-    border-radius: 12px;
-    padding: 3rem;
-    transition: all 0.3s ease-in-out;
-    z-index: 3; 
+  max-width: 900px;
+  width: 100%;
+  background-color: rgba(255, 255, 255, 0.98); 
+  border-radius: 16px;
+  padding: 3.5rem 2.5rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+  z-index: 3;
+  backdrop-filter: blur(8px); 
+  transform-style: preserve-3d;
+  
+  margin: auto;
+
+}
+
+.fadeIn {
+  animation: fadeIn 1.2s ease-out forwards;
+}
+
+.fadeInDelay {
+  opacity: 0;
+  animation: fadeIn 1.2s ease-out 0.5s forwards;
+}
+
+.slideDown {
+  opacity: 0;
+  animation: slideDown 1s ease forwards;
+}
+
+.popIn {
+  opacity: 0;
+  animation: popIn 0.8s cubic-bezier(0.68, -0.55, 0.27, 1.55) forwards;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes popIn {
+  0% { transform: scale(0.7) rotateX(20deg); opacity: 0; }
+  100% { transform: scale(1) rotateX(0deg); opacity: 1; }
 }
 
 .mainTitle {
-    font-size: 2.5rem;
-    font-weight: 800;
-    color: var(--text-dark); 
-    margin-bottom: 1.5rem;
-    padding-bottom: 0.5rem;
-    border-bottom: 4px solid var(--primary-color);
+  font-size: 3rem;
+  font-weight: 900;
+  border-bottom: 6px solid var(--primary-color);
+  padding-bottom: 0.8rem;
+  margin-bottom: 1.5rem;
+  color: var(--text-dark);
+  text-shadow: 1px 1px 0 #fff, 0 0 10px rgba(0, 0, 0, 0.1);
+  line-height: 1.1;
 }
 
 .sectionTitle {
-    font-size: 1.75rem;
-    font-weight: 700;
-    color: var(--text-dark);
-    margin-top: 2.5rem;
-    margin-bottom: 1rem;
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--secondary-color);
+  border-left: 5px solid var(--secondary-color);
+  padding-left: 15px;
+  margin-top: 2.5rem;
+  margin-bottom: 1.5rem;
 }
 
 .paragraph {
-    color: #4b5563;
-    line-height: 1.75;
-    margin-bottom: 2rem;
-    border-left: 5px solid #d1d5db;
-    padding-left: 1rem;
-    font-style: italic;
+  font-size: 1.15rem;
+  line-height: 1.7;
+  color: var(--text-secondary);
+  margin-bottom: 1.5rem;
 }
 
 .backButton {
-    background: none;
-    border: 2px solid var(--primary-color);
-    color: var(--primary-color);
-    padding: 8px 15px;
-    margin-bottom: 25px;
-    border-radius: 9999px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.3s ease;
+  position: fixed; 
+  top: 40px; 
+  left: 40px;
+  border: none;
+  background-color: var(--secondary-color);
+  padding: 10px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 700;
+  color: var(--text-light);
+  transition: all 0.3s ease;
+  z-index: 5;
+  box-shadow: 0 4px 0 #9f1239; 
 }
 
 .backButton:hover {
-    background-color: var(--primary-color);
-    color: white;
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  background-color: #c51d40;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 0 #9f1239;
 }
 
+.backButton:active {
+  transform: translateY(2px);
+  box-shadow: 0 2px 0 #9f1239;
+}
+
+
 .highlightBox {
-    background-color: #ffe4e6; 
-    border: 3px solid var(--secondary-color);
-    border-radius: 10px;
-    padding: 20px;
+    background-color: rgba(var(--primary-color), 0.1);
+    border-left: 5px solid var(--primary-color);
+    padding: 1.5rem;
     margin: 2rem 0;
-    text-align: center;
-    box-shadow: 0 5px 15px rgba(244, 63, 94, 0.2);
+    border-radius: 8px;
+    box-shadow: var(--shadow-light);
 }
 
 .highlightTitle {
-    font-size: 1.5rem;
-    font-weight: 800;
-    color: var(--text-highlight); 
-    margin-bottom: 10px;
+    color: var(--primary-color);
+    font-size: 1.4rem;
+    margin-bottom: 0.5rem;
 }
 
 .highlightText {
-    color: var(--text-highlight);
-    line-height: 1.6;
-    font-weight: 500;
+    color: var(--text-secondary);
 }
 
-.techList {
+.techList, .featureList {
     list-style: none;
     padding: 0;
-    margin: 0;
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 15px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 2rem;
 }
 
 .techItem {
-    background-color: #e0f2fe;
-    color: var(--text-dark);
-    padding: 1rem;
-    border-radius: 8px;
-    font-weight: 500;
-    border-left: 5px solid var(--primary-color);
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    background-color: var(--text-dark);
+    color: var(--highlight-color);
+    padding: 8px 15px;
+    border-radius: 5px;
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.9rem;
+    transition: transform 0.2s;
 }
 
 .techItem:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 10px 20px -5px rgba(0, 0, 0, 0.15);
-}
-
-.featureList {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    list-style-type: none;
-    padding-left: 0;
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
+    transform: translateY(-2px);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
 }
 
 .featureItem {
-    background-color: #d1fae5; 
-    padding: 1rem 1.5rem;
-    border-radius: 8px;
-    font-weight: 500;
-    color: #065f46;
-    position: relative;
-}
-
-.featureItem::before {
-    content: '⭐';
-    position: absolute;
-    left: 5px;
-    top: 50%;
-    transform: translateY(-50%);
-    font-size: 1.2rem;
-    padding-right: 20px;
+    font-size: 1.1rem;
+    color: var(--text-dark);
+    padding: 5px 0;
+    border-left: 10px solid var(--highlight-color);
+    padding-left: 10px;
+    margin-bottom: 8px;
 }
 
 .featureFocus {
     font-weight: 700;
-    color: var(--primary-color);
+    color: var(--secondary-color);
 }
 
-.footerText {
-    text-align: center;
-    font-style: italic;
-    color: #6b7280;
-    padding-top: 20px;
-    margin-top: 30px;
-    border-top: 1px dashed #d1d5db;
+.floatingPokeball1, .floatingPikachu {
+    position: absolute;
+    opacity: 0.7;
+    transition: transform 0.5s ease-out;
+    z-index: 4;
+}
+
+.floatingPokeball1 {
+  top: 10%;
+  right: 8%;
+  width: 90px;
+  animation: float 5s ease-in-out infinite;
+}
+
+.floatingPikachu {
+  bottom: 5%;
+  left: 5%;
+  width: 150px;
+  animation: float2 6s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px) rotate(0deg); }
+  50% { transform: translateY(-25px) rotate(5deg); }
+}
+
+@keyframes float2 {
+  0%, 100% { transform: translateY(0px) scale(1); }
+  50% { transform: translateY(-15px) scale(1.05) rotate(-3deg); }
 }
 
 @media (max-width: 768px) {
-    .contentBox {
-        padding: 1.5rem;
-    }
-    .mainTitle {
-        font-size: 2rem;
-    }
+  .container {
+    padding: 20px 10px;
+    align-items: flex-start;
+  }
+
+  .contentBox {
+    padding: 2rem 1.5rem;
+    margin-top: 60px;
+  }
+
+  .mainTitle {
+    font-size: 2rem;
+  }
+  
+  .sectionTitle {
+    font-size: 1.5rem;
+  }
+  
+  .backButton {
+    position: fixed; 
+    top: 20px; 
+    left: 50%; 
+    transform: translateX(-50%);
+  }
+
+  .floatingPokeball1, .floatingPikachu {
+    display: none;
+  }
 }
