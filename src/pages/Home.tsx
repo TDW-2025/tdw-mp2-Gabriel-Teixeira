@@ -3,6 +3,8 @@ import { useDispatch, useSelector } from "react-redux";
 import type { RootState } from "../store";
 import styles from "../styles/Home.module.css";
 import { voteForDigimon, voteForPokemon } from "../slices/votingSlice"; 
+import digimonGif from "../assets/digimon.gif"; 
+import pokemonGif from "../assets/pokemon.gif";
 
 export default function Home() {
   const dispatch = useDispatch();
@@ -28,7 +30,7 @@ export default function Home() {
         to="/digimon"
         className={`${styles.fullpageStrip} ${styles.left}`}
       >
-        <img src="./src/assets/digimon.gif" className={styles.hoverGif} alt="Digimon GIF"/>
+        <img src={digimonGif} className={styles.hoverGif} alt="Digimon GIF"/>
         <div className={styles.panelContent}>
           <h2>Digimon</h2>
           <button 
@@ -80,7 +82,7 @@ export default function Home() {
         to="/pokemon"
         className={`${styles.fullpageStrip} ${styles.right}`}
       >
-        <img src="./src/assets/pokemon.gif" className={styles.hoverGif} alt="Pokémon GIF"/>
+        <img src={pokemonGif} className={styles.hoverGif} alt="Pokémon GIF"/>
         <div className={styles.panelContent}>
           <h2>Pokémon</h2>
           <button 
