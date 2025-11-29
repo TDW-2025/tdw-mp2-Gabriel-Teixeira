@@ -2,6 +2,7 @@ name: CI/CD Pipeline
 
 on:
   push:
+    branches: [ main ] # Adiciona o main para deploy
   pull_request:
 
 jobs:
@@ -16,11 +17,20 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 20
+          
       - name: Install dependencies
         run: npm install
+
+      - name: Audit dependencies for vulnerabilities
+        run: npm audit
 
       - name: Lint code
         run: npm run lint
 
+      - name: Check TypeScript types
+        run: npx tsc --noEmit
+        
       - name: Build project
         run: npm run build
+
+      - name: Deploy to GitHub Pages
