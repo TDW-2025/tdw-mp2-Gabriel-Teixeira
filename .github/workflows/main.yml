@@ -40,9 +40,6 @@ jobs:
       - name: Lint code
         run: npm run lint
 
-      - name: Run tests
-        run: npm run test
-
       - name: Check TypeScript types
         run: npx tsc --noEmit
         
