@@ -5,7 +5,6 @@ import styles from "../styles/Home.module.css";
 import { voteForDigimon, voteForPokemon } from "../slices/votingSlice"; 
 import digimonGif from "../assets/digimon.gif"; 
 import pokemonGif from "../assets/pokemon.gif";
-
 export default function Home() {
   const dispatch = useDispatch();
 
