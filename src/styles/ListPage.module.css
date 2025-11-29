@@ -1,3 +1,4 @@
+
 .title {
   font-size: 3rem;
   color: #FF8C00;
@@ -31,6 +32,36 @@
   outline: none;
 }
 
+.actions {
+  display: flex;
+  gap: 15px; 
+  justify-content: center; 
+  margin-bottom: 25px; 
+  margin-top: 10px;
+}
+
+.actionButton {
+  padding: 10px 20px;
+  background: #1976d2; 
+  border: none;
+  border-radius: 8px;
+  color: #fff;
+  font-weight: 600;
+  font-size: 1.0rem;
+  cursor: pointer;
+  text-decoration: none; 
+  transition: all 0.3s ease;
+  z-index: 100;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+}
+
+.actionButton:hover {
+  transform: translateY(-2px);
+  background: #1565c0;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+}
+
+
 .list {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -40,6 +71,7 @@
   max-width: 1200px;
   width: 100%;
   margin-top: 30px;
+  color: #222;
 }
 
 .itemLink {
@@ -76,6 +108,12 @@
 
 .favButton:hover {
   transform: scale(1.1);
+}
+
+.noResults {
+    color: #fff;
+    font-size: 1.2rem;
+    margin-top: 20px;
 }
 
 @media (max-width: 1024px) {

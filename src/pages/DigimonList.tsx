@@ -43,10 +43,16 @@ export default function DigimonList() {
           onChange={(e) => setSearch(e.target.value)}
         />
       </div>
-
-      <button className={stylesGolbal.backButton} onClick={() => navigate(-1)}>
-        ← Voltar
-      </button>
+      
+      <div className={styles.actions}> 
+        <Link to="/favoritos" className={styles.actionButton}>
+          💖 Ver Favoritos ({favoritos.length})
+        </Link>
+        
+        <button className={styles.actionButton} onClick={() => navigate(-1)}>
+          ← Voltar
+        </button>
+      </div>
 
       <ul className={styles.list}>
         {filteredData?.map((digimon) => (

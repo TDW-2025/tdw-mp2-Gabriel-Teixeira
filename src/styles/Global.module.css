@@ -9,7 +9,7 @@ html, body, #root {
 body {
   display: flex;
   justify-content: center; 
-  align-items: center;     
+  align-items: center;  
 }
 
 .containerDigimon {
@@ -87,3 +87,4 @@ body {
   transform: translateY(-5px);
   box-shadow: 0 12px 25px rgba(0, 0, 0, 0.25), 0 0 20px rgba(0, 81, 255, 0.15);
 }
+

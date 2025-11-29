@@ -6,6 +6,8 @@ import DigimonList from "./pages/DigimonList";
 import DigimonDetail from "./pages/DigimonDetail";
 import About from "./pages/About";
 
+import FavoritosPage from "./pages/FavoritosPage.tsx";
+
 export default function App() {
   return (
     <Routes>
@@ -17,6 +19,8 @@ export default function App() {
 
       <Route path="/digimon" element={<DigimonList />} />
       <Route path="/digimon/:name" element={<DigimonDetail />} />
+
+      <Route path="/favoritos" element={<FavoritosPage />} />
     </Routes>
   );
 }
