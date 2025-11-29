@@ -29,12 +29,10 @@
 
 /* Temas Laterais */
 .left {
-  background-image: url("../assets/digimon-right.jpg");
   background-color: #b71c1c; 
 }
 
 .right {
-  background-image: url("../assets/pokemon-left.jpg");
   background-color: #0d47a1;
 }
 
