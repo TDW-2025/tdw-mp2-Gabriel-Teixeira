@@ -1,49 +1,61 @@
-// src/pages/About/About.tsx
 import { useNavigate } from "react-router-dom";
-import styles from "../styles/About.module.css"; 
+import styles from "../styles/About.module.css";
 import FundoPokemon from '../assets/FundoPokemon.png'; 
+import DigimonGif from '../assets/digimon.gif'; 
+import PokeballSpin from '../assets/pokemon.gif'; 
 
 interface CSSProps extends React.CSSProperties {
-    '--background-image': string;
+  '--background-image': string;
 }
 
 export default function About() {
   const navigate = useNavigate();
 
   return (
-    <div 
-        className={styles.container} 
-        style={{ '--background-image': `url(${FundoPokemon})` } as CSSProps}
+    <div
+      className={styles.container}
+      style={{ '--background-image': `url(${FundoPokemon})` } as CSSProps}
     >
-      <div className={styles.contentBox}>
-        
-        <button 
-          className={styles.backButton} 
-          onClick={() => navigate(-1)}
-        >
-          ← Voltar
-        </button>
+      <img 
+        src={PokeballSpin} 
+        alt="Pokebola Girando"
+        className={styles.floatingPokeball1} 
+      />
+      <img 
+        src={DigimonGif} 
+        alt="Digimon Flutuando"
+        className={styles.floatingPikachu} 
+      />
 
-        <h1 className={styles.mainTitle}>Duelo Digital: Plataforma de Votação Interativa Pokémon vs. Digimon</h1>
+      <button 
+        className={styles.backButton}
+        onClick={() => navigate(-1)}
+      >
+        ← Voltar
+      </button>
+
+      <div className={`${styles.contentBox} ${styles.fadeIn}`}>
         
-        <p className={styles.paragraph}>
-          Este projeto foi desenvolvido como parte do curso de **Desenvolvimento Web** (MP2), utilizando o 
-          ecossistema moderno do React, Redux e TypeScript. 
+        <h1 className={`${styles.mainTitle} ${styles.slideDown}`}>
+          Duelo Digital: Plataforma Pokémon vs Digimon
+        </h1>
+        
+        <p className={`${styles.paragraph} ${styles.fadeInDelay}`}>
+          Este projeto foi desenvolvido como parte do curso de 
+          <strong> Desenvolvimento Web </strong> (MP2), utilizando o ecossistema moderno de React, Redux e TypeScript.
           <br/><br/>
-          O objetivo central é criar uma experiência de alto desempenho onde os fãs podem explorar informações 
-          sobre as duas maiores franquias de monstros de bolso e, mais importante, participar da **Votação Interativa** para decidir qual criatura ou franquia se destaca!
+          O objetivo é proporcionar uma experiência interativa onde os fãs podem explorar criaturas
+          e participar da <strong>votação interativa</strong> para decidir qual franquia domina!
         </p>
 
-        <div className={styles.highlightBox}>
-            <h3 className={styles.highlightTitle}>A Funcionalidade Principal: O Sistema de Votos</h3>
-            <p className={styles.highlightText}>
-                O **sistema de votação em tempo real** é o coração da nossa aplicação. Os usuários podem votar em seus 
-                Pokémon e Digimon favoritos, criando um placar dinâmico para alimentar a rivalidade 
-                amigável entre as comunidades. Esta característica é o foco principal da interatividade do projeto.
-            </p>
+        <div className={`${styles.highlightBox} ${styles.popIn}`}>
+          <h3 className={styles.highlightTitle}>🔥 Sistema de Votação (Core do Projeto)</h3>
+          <p className={styles.highlightText}>
+            A votação em tempo real é o coração da aplicação. As escolhas são persistidas, permitindo que os usuários vejam o placar dinâmico evoluir ao longo do tempo.
+          </p>
         </div>
 
-        <h2 className={styles.sectionTitle}>Tecnologias Utilizadas</h2>
+        <h2 className={styles.sectionTitle}>🛠 Tecnologias Utilizadas</h2>
         <ul className={styles.techList}>
           <li className={styles.techItem}>React</li>
           <li className={styles.techItem}>Redux Toolkit</li>
@@ -53,17 +65,17 @@ export default function About() {
           <li className={styles.techItem}>CSS Modules</li>
         </ul>
 
-        <h2 className={styles.sectionTitle}>Outras Funcionalidades</h2>
+        <h2 className={styles.sectionTitle}>✨ Funcionalidades Chave</h2>
         <ul className={styles.featureList}>
-          <li className={styles.featureItem}><span className={styles.featureFocus}>Votação Interativa:</span> O core do projeto, permitindo o engajamento direto dos fãs.</li> 
-          <li className={styles.featureItem}>Listagem de Pokémon e Digimon com paginação eficiente.</li>
-          <li className={styles.featureItem}>Detalhes individuais para cada criatura.</li>
-          <li className={styles.featureItem}>Sistema de favoritos para marcar suas criaturas preferidas.</li>
+          <li className={styles.featureItem}><span className={styles.featureFocus}>Votação Interativa</span>: Votos persistentes com placar em tempo real.</li> 
+          <li className={styles.featureItem}><span className={styles.featureFocus}>Duas APIs</span>: Consumo e harmonização de dados de Digimon e Pokémon.</li>
+          <li className={styles.featureItem}>Listagem com Paginação e Filtros Avançados (por Tipo e Pesquisa).</li>
+          <li className={styles.featureItem}>Páginas de Detalhe ricas em informações (Estatísticas, Nível/Tipo).</li>
+          <li className={styles.featureItem}>Sistema de Marcar favoritos ⭐</li>
         </ul>
-        
+
         <p className={styles.footerText}>
-          Sinta-se à vontade para explorar o código-fonte no repositório do GitHub
-          e contribuir com melhorias!
+          Sinta-se à vontade para explorar o código-fonte no repositório do GitHub e contribuir com melhorias!
         </p>
       </div>
     </div>
