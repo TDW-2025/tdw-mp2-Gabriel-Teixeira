@@ -48,14 +48,9 @@ jobs:
 
       - name: Verify dist folder
         run: |
-          echo "Checking if dist folder exists..."
           if [ ! -d "dist" ]; then
-            echo "Error: dist folder not found!"
             ls -la
             exit 1
-          else
-            echo "dist folder exists."
-            ls -la dist
           fi
 
       - name: Deploy to Netlify
@@ -66,8 +61,7 @@ jobs:
         run: |
           BRANCH_NAME="${GITHUB_REF##*/}"
           if [ "$BRANCH_NAME" = "main" ]; then
-            echo "Deploying to production..."
             npx netlify-cli deploy --auth $NETLIFY_AUTH_TOKEN --site $NETLIFY_SITE_ID --dir=dist --prod
           else
-            echo "Deploying preview for develop branch..."
             npx netlify-cli deploy --auth $NETLIFY_AUTH_TOKEN --site $NETLIFY_SITE_ID --dir=dist --message "Preview build from develop branch"
+          fi

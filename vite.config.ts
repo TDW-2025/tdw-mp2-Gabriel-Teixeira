@@ -6,9 +6,7 @@ export default defineConfig({
   
   base: "/", 
   
-  // *** NOVA SEÇÃO PARA MUDAR O NOME DA PASTA DE SAÍDA ***
   build: {
-    outDir: 'out', // Agora o Vite criará a pasta 'out'
+    outDir: 'dist', 
   },
-  // *******************************************************
 })
