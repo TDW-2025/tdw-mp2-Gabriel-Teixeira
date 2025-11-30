@@ -4,5 +4,11 @@ import react from '@vitejs/plugin-react-swc'
 export default defineConfig({
   plugins: [react()],
   
-  base: "/tdw-mp2-Gabriel-Teixeira/", 
+  base: "/", 
+  
+  // *** NOVA SEÇÃO PARA MUDAR O NOME DA PASTA DE SAÍDA ***
+  build: {
+    outDir: 'out', // Agora o Vite criará a pasta 'out'
+  },
+  // *******************************************************
 })
