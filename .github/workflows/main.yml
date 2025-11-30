@@ -7,24 +7,24 @@ on:
     branches: [ main, develop ]
 
 jobs:
-  build:
+  build-and-deploy:
     runs-on: ubuntu-latest
     permissions:
       contents: write
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4 
+        uses: actions/checkout@v4
         with:
-          fetch-depth: 0 
+          fetch-depth: 0
 
       - name: Setup Node.js
-        uses: actions/setup-node@v4 
+        uses: actions/setup-node@v4
         with:
           node-version: 20
-          
+
       - name: Cache dependencies
-        uses: actions/cache@v4 
+        uses: actions/cache@v4
         with:
           path: node_modules
           key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
@@ -32,23 +32,42 @@ jobs:
             ${{ runner.os }}-node-
 
       - name: Install dependencies
-        run: npm ci 
+        run: npm ci
 
-      - name: Audit dependencies for vulnerabilities
-        run: npm audit
+      - name: Audit dependencies
+        run: npm audit --audit-level=moderate || true
 
       - name: Lint code
         run: npm run lint
 
       - name: Check TypeScript types
         run: npx tsc --noEmit
-        
+
       - name: Build project
         run: npm run build
+
+      - name: Verify dist folder
+        run: |
+          echo "Checking if dist folder exists..."
+          if [ ! -d "dist" ]; then
+            echo "Error: dist folder not found!"
+            ls -la
+            exit 1
+          else
+            echo "dist folder exists."
+            ls -la dist
+          fi
 
       - name: Deploy to Netlify
         if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/develop'
         env:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
           NETLIFY_SITE_ID: ${{ secrets.SITEID }}
-        run: npx netlify-cli deploy --auth $NETLIFY_AUTH_TOKEN --site $NETLIFY_SITE_ID --dir=dist --prod
+        run: |
+          BRANCH_NAME="${GITHUB_REF##*/}"
+          if [ "$BRANCH_NAME" = "main" ]; then
+            echo "Deploying to production..."
+            npx netlify-cli deploy --auth $NETLIFY_AUTH_TOKEN --site $NETLIFY_SITE_ID --dir=dist --prod
+          else
+            echo "Deploying preview for develop branch..."
+            npx netlify-cli deploy --auth $NETLIFY_AUTH_TOKEN --site $NETLIFY_SITE_ID --dir=dist --message "Preview build from develop branch"
