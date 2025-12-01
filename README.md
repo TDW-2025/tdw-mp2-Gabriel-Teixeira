@@ -1,73 +1,43 @@
-# React + TypeScript + Vite
+# Pokemon vs Digimon
+Este é o repositório para o Módulo Prático 2 (MP2) da disciplina Tecnologias de Desenvolvimento Web (TDW).
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Links do Projeto
+[![Netlify Status](https://api.netlify.com/api/v1/badges/86294656-6754-4b57-bd2b-68efe3777487/deploy-status)](https://app.netlify.com/projects/tdw-mp2-gabriel-teixeira/deploys) 
 
-Currently, two official plugins are available:
+**Link da Aplicação Online**  **https://pokemon-vs-digimon.tdw-mctw.pt/** 
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+> O projeto **Pokémon vs Digimon** é uma aplicação interativa que permite aos utilizadores comparar e visualizar dados de personagens destes dois universos, utilizando APIs públicas para a recolha de informação.
 
-## React Compiler
+## Tecnologias Principais
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+O projeto foi construído utilizando as seguintes tecnologias e bibliotecas:
 
-## Expanding the ESLint configuration
+* React (Biblioteca de UI)
+* TypeScript (Adiciona tipagem estática)
+* Vite (Ferramenta de build moderno)
+* Redux (Gestão de estado)
+* CSS Modules (Estilização modular)
+* React Router Link (Navegação)
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## Como Correr o Projeto Localmente
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+Siga os passos abaixo para executar o projeto na sua máquina:
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+1.  **Clone o repositório:**
+    ```bash
+    git clone [https://github.com/TDW-2025/tdw-mp2-Gabriel-Teixeira.git](https://github.com/TDW-2025/tdw-mp2-Gabriel-Teixeira.git)
+    cd tdw-mp2-Gabriel-Teixeira
+    ```
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+2.  **Instale as dependências:**
+    ```bash
+    npm install
+    ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+3.  **Execute em modo de desenvolvimento:**
+    ```bash
+    npm run dev
+    ```
+    O projeto estará acessível no seu browser, geralmente em `http://localhost:5173`.
