@@ -8,7 +8,12 @@ interface Props {
   onToggle: () => void;
 }
 
-export default function FavoriteCard({ nome, imagem, isFavorito, onToggle }: Props) {
+export default function FavoriteCard({
+  nome,
+  imagem,
+  isFavorito,
+  onToggle,
+}: Props) {
   return (
     <div className={styles.staticDigimon}>
       <img

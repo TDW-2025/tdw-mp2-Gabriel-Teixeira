@@ -1,7 +1,7 @@
 .backButton {
-  position: fixed;      
-  top: 7rem;            
-  left: 5rem;           
+  position: fixed;
+  top: 7rem;
+  left: 5rem;
   padding: 1rem 2rem;
   border: none;
   border-radius: 8px;
@@ -9,10 +9,9 @@
   font-weight: bold;
   cursor: pointer;
   font-size: 1rem;
-  z-index: 1000;        
+  z-index: 1000;
   transition: transform 0.2s;
 }
-
 
 .backButton:hover {
   transform: scale(1.05);

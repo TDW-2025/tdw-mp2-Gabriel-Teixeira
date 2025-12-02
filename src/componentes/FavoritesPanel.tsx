@@ -18,7 +18,9 @@ interface Props {
 export default function FavoritesPanel({ favoritos }: Props) {
   const dispatch = useDispatch();
 
-  const favoritosRedux = useSelector((state: RootState) => state.favoritos.items);
+  const favoritosRedux = useSelector(
+    (state: RootState) => state.favoritos.items,
+  );
 
   const [showPokemon, setShowPokemon] = useState(true);
   const [showDigimon, setShowDigimon] = useState(true);

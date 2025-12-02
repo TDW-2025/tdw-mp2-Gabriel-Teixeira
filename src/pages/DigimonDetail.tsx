@@ -4,7 +4,7 @@ import { addFavorito, removeFavorito } from "../slices/favoritosSlice";
 import type { RootState } from "../store";
 import { HeartStraight } from "phosphor-react";
 import { useGetDigimonByNameQuery } from "../services/digimonApi";
-import styles from "../styles/DigimonDetail.module.css"; 
+import styles from "../styles/DigimonDetail.module.css";
 import stylesGlobal from "../styles/Global.module.css";
 import type { Digimon } from "../types/digimon";
 
@@ -18,7 +18,8 @@ export default function DigimonDetail() {
 
   const { data, isLoading, isError } = useGetDigimonByNameQuery(decodedName);
 
-  const digimon: Digimon | undefined = data && data.length > 0 ? data[0] : undefined;
+  const digimon: Digimon | undefined =
+    data && data.length > 0 ? data[0] : undefined;
 
   if (isLoading) {
     return <p className={styles.message}>Carregando detalhes...</p>;
@@ -51,10 +52,7 @@ export default function DigimonDetail() {
 
         <img src={digimon.img} alt={digimon.name} className={styles.image} />
 
-        <button  
-            onClick={toggleFavorito}
-            className={styles.favButton} 
-        >
+        <button onClick={toggleFavorito} className={styles.favButton}>
           <HeartStraight
             size={34}
             color={favoritos.includes(digimon.name) ? "red" : "#c62a2a"}

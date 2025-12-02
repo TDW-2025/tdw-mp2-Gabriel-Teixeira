@@ -8,7 +8,6 @@ import DigimonCard from "../componentes/DigimonCard";
 import styles from "../styles/ListPage.module.css";
 import stylesGolbal from "../styles/Global.module.css";
 
-
 export default function DigimonList() {
   const { data, isLoading, isError } = useGetDigimonListQuery();
   const [search, setSearch] = useState("");
@@ -27,7 +26,7 @@ export default function DigimonList() {
 
   const filteredData = data
     ?.filter((digimon) =>
-      digimon.name.toLowerCase().includes(search.toLowerCase())
+      digimon.name.toLowerCase().includes(search.toLowerCase()),
     )
     .slice(0, 8);
 
@@ -43,12 +42,12 @@ export default function DigimonList() {
           onChange={(e) => setSearch(e.target.value)}
         />
       </div>
-      
-      <div className={styles.actions}> 
+
+      <div className={styles.actions}>
         <Link to="/favoritos" className={styles.actionButton}>
           💖 Ver Favoritos ({favoritos.length})
         </Link>
-        
+
         <button className={styles.actionButton} onClick={() => navigate(-1)}>
           ← Voltar
         </button>

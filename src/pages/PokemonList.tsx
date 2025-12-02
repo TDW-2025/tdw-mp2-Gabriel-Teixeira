@@ -31,9 +31,24 @@ interface PokemonWithImage {
 
 // Lista fixa dos tipos de Pokémon
 const pokemonTypes = [
-  "normal", "fire", "water", "grass", "electric", "ice", "fighting",
-  "poison", "ground", "flying", "psychic", "bug", "rock", "ghost",
-  "dragon", "steel", "dark", "fairy"
+  "normal",
+  "fire",
+  "water",
+  "grass",
+  "electric",
+  "ice",
+  "fighting",
+  "poison",
+  "ground",
+  "flying",
+  "psychic",
+  "bug",
+  "rock",
+  "ghost",
+  "dragon",
+  "steel",
+  "dark",
+  "fairy",
 ];
 
 export default function PokemonList() {
@@ -41,14 +56,19 @@ export default function PokemonList() {
   const { data: listData, isLoading, isError } = useGetPokemonListQuery(200); // Busca até 200 Pokémon
   const [pokemonList, setPokemonList] = useState<PokemonWithImage[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const [activeTab, setActiveTab] =
-    useState<"list" | "favorites" | "caught">("list");
+  const [activeTab, setActiveTab] = useState<"list" | "favorites" | "caught">(
+    "list",
+  );
   const [searchTerm, setSearchTerm] = useState("");
   const [activeType, setActiveType] = useState<string>("all"); // NOVO ESTADO: Tipo ativo
 
   const dispatch = useDispatch();
-  const favorites = useSelector((state: RootState) => state.pokemonStatus.favorites ?? []);
-  const caught = useSelector((state: RootState) => state.pokemonStatus.caught ?? []);
+  const favorites = useSelector(
+    (state: RootState) => state.pokemonStatus.favorites ?? [],
+  );
+  const caught = useSelector(
+    (state: RootState) => state.pokemonStatus.caught ?? [],
+  );
 
   const itemsPerPage = 25;
 
@@ -61,20 +81,22 @@ export default function PokemonList() {
         listData.results.map(async (pokemon: PokemonListResult) => {
           const res = await fetch(pokemon.url);
           const data = await res.json();
-          
+
           const animatedSprite =
             data.sprites.versions?.["generation-v"]?.["black-white"]?.animated
               ?.front_default;
-          
+
           // Mapeia os tipos (CORRIGIDO: usando PokemonTypeInfo)
-          const types = data.types.map((typeInfo: PokemonTypeInfo) => typeInfo.type.name); 
+          const types = data.types.map(
+            (typeInfo: PokemonTypeInfo) => typeInfo.type.name,
+          );
 
           return {
             name: data.name,
             image: animatedSprite || data.sprites.front_default,
             types: types, // Inclui os tipos
           };
-        })
+        }),
       );
       setPokemonList(result);
     };
@@ -95,19 +117,19 @@ export default function PokemonList() {
   }, [activeTab, searchTerm, activeType]); // Dependências: Tab, Pesquisa, Tipo
 
   // --- Lógica de Filtragem ---
-  
+
   // 1. Filtragem por Tab (Lista, Favoritos, Apanhados)
   let filteredList =
     activeTab === "list"
       ? pokemonList
       : activeTab === "favorites"
-      ? pokemonList.filter((p) => favorites.includes(p.name))
-      : pokemonList.filter((p) => caught.includes(p.name));
+        ? pokemonList.filter((p) => favorites.includes(p.name))
+        : pokemonList.filter((p) => caught.includes(p.name));
 
   filteredList = filteredList.filter((p) =>
-    p.name.toLowerCase().includes(searchTerm.toLowerCase())
+    p.name.toLowerCase().includes(searchTerm.toLowerCase()),
   );
-  
+
   if (activeType !== "all") {
     filteredList = filteredList.filter((p) => p.types.includes(activeType));
   }
@@ -115,11 +137,16 @@ export default function PokemonList() {
   // --- Lógica de Paginação ---
   const totalPages = Math.ceil(filteredList.length / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
-  const displayedPokemons = filteredList.slice(startIndex, startIndex + itemsPerPage);
+  const displayedPokemons = filteredList.slice(
+    startIndex,
+    startIndex + itemsPerPage,
+  );
 
   // --- Exibição de Carregamento/Erro ---
-  if (isLoading) return <p className={styles.loadingFallback}>Carregando Pokémon...</p>;
-  if (isError) return <p className={styles.loadingFallback}>Erro ao carregar Pokémon.</p>;
+  if (isLoading)
+    return <p className={styles.loadingFallback}>Carregando Pokémon...</p>;
+  if (isError)
+    return <p className={styles.loadingFallback}>Erro ao carregar Pokémon.</p>;
 
   // --- Renderização ---
   return (
@@ -143,7 +170,9 @@ export default function PokemonList() {
             <div className={styles.tabs}>
               <button
                 className={styles.detailsButton}
-                style={{ background: activeTab === "list" ? "#d50000" : "#ff0000" }}
+                style={{
+                  background: activeTab === "list" ? "#d50000" : "#ff0000",
+                }}
                 onClick={() => setActiveTab("list")}
               >
                 Lista
@@ -151,7 +180,9 @@ export default function PokemonList() {
 
               <button
                 className={styles.detailsButton}
-                style={{ background: activeTab === "favorites" ? "#d50000" : "#ff0000" }}
+                style={{
+                  background: activeTab === "favorites" ? "#d50000" : "#ff0000",
+                }}
                 onClick={() => setActiveTab("favorites")}
               >
                 Favoritos ({favorites.length})
@@ -159,12 +190,14 @@ export default function PokemonList() {
 
               <button
                 className={styles.detailsButton}
-                style={{ background: activeTab === "caught" ? "#d50000" : "#ff0000" }}
+                style={{
+                  background: activeTab === "caught" ? "#d50000" : "#ff0000",
+                }}
                 onClick={() => setActiveTab("caught")}
               >
                 Apanhados ({caught.length})
               </button>
-              
+
               <input
                 type="text"
                 placeholder="Pesquisar Pokémon..."
@@ -175,7 +208,7 @@ export default function PokemonList() {
 
               {/* SELECT PARA FILTRAR POR TIPO */}
               <select
-                className={styles.typeFilter} 
+                className={styles.typeFilter}
                 value={activeType}
                 onChange={(e) => setActiveType(e.target.value)}
               >
@@ -187,7 +220,6 @@ export default function PokemonList() {
                 ))}
               </select>
               {/* FIM DO SELECT */}
-
             </div>
 
             <div className={styles.screenContent}>
@@ -211,16 +243,14 @@ export default function PokemonList() {
                   Nenhum Pokémon encontrado com os filtros aplicados.
                 </p>
               )}
-              
+
               <Pagination
                 totalPages={totalPages}
                 currentPage={currentPage}
                 onPageChange={setCurrentPage}
               />
             </div>
-            
           </div>
-          
 
           <div className={styles.sideRight} />
         </div>

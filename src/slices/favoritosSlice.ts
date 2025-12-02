@@ -17,7 +17,7 @@ export const favoritosSlice = createSlice({
       const name = action.payload;
 
       console.log("ACTION: addFavorito");
-      console.log("Digimon recebido:", name); 
+      console.log("Digimon recebido:", name);
       console.log("Lista atual (antes):", [...state.items]);
 
       if (!state.items.includes(name)) {

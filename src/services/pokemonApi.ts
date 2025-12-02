@@ -8,7 +8,12 @@ export const pokemonApi = createApi({
   }),
   endpoints: (builder) => ({
     getPokemonList: builder.query<
-      { count: number; next: string | null; previous: string | null; results: { name: string; url: string }[] },
+      {
+        count: number;
+        next: string | null;
+        previous: string | null;
+        results: { name: string; url: string }[];
+      },
       number
     >({
       query: (limit = 151) => `pokemon?limit=${limit}`,

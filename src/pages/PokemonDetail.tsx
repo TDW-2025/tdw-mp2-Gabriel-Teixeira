@@ -16,7 +16,7 @@ const statNameMap: { [key: string]: string } = {
 
 export default function PokemonDetail() {
   const { name } = useParams<{ name: string }>();
-  const { data, isLoading, isError } = useGetPokemonByNameQuery(name!); 
+  const { data, isLoading, isError } = useGetPokemonByNameQuery(name!);
 
   if (isLoading) return <p style={{ textAlign: "center" }}>Carregando...</p>;
   if (isError || !data)
@@ -24,35 +24,41 @@ export default function PokemonDetail() {
 
   const pokemon: Pokemon = data;
 
-  const animatedSprite = 
-    pokemon.sprites.versions?.['generation-v']?.['black-white']?.animated?.front_default 
-    || pokemon.sprites.front_default;
+  const animatedSprite =
+    pokemon.sprites.versions?.["generation-v"]?.["black-white"]?.animated
+      ?.front_default || pokemon.sprites.front_default;
 
   return (
     <div className={stylesGlobal.containerPokemom}>
-      <BackButton type={pokemon.types[0].type.name} label="Voltar" /> 
+      <BackButton type={pokemon.types[0].type.name} label="Voltar" />
       <h1 className={styles.title}>{pokemon.name}</h1>
 
       <div className={styles.card}>
         <div className={styles.mainContent}>
           <div className={styles.imageInfo}>
             <div className={styles.images}>
-              <img 
-                src={animatedSprite ?? undefined} 
-                alt={`${pokemon.name} frente`} 
-                className={`${styles.img} ${styles.animatedImg}`} 
+              <img
+                src={animatedSprite ?? undefined}
+                alt={`${pokemon.name} frente`}
+                className={`${styles.img} ${styles.animatedImg}`}
               />
-              
-              <img 
-                src={pokemon.sprites.back_default ?? undefined} 
-                alt={`${pokemon.name} trás`} 
-                className={styles.img} 
+
+              <img
+                src={pokemon.sprites.back_default ?? undefined}
+                alt={`${pokemon.name} trás`}
+                className={styles.img}
               />
             </div>
 
-            <p><strong>Número:</strong> #{pokemon.id}</p>
-            <p><strong>Altura:</strong> {pokemon.height / 10} m</p>
-            <p><strong>Peso:</strong> {pokemon.weight / 10} kg</p>
+            <p>
+              <strong>Número:</strong> #{pokemon.id}
+            </p>
+            <p>
+              <strong>Altura:</strong> {pokemon.height / 10} m
+            </p>
+            <p>
+              <strong>Peso:</strong> {pokemon.weight / 10} kg
+            </p>
 
             <div className={styles.types}>
               {pokemon.types.map((t) => (
@@ -62,9 +68,8 @@ export default function PokemonDetail() {
               ))}
             </div>
           </div>
-          
-          <div className={styles.statsAbilities}> 
-            
+
+          <div className={styles.statsAbilities}>
             <div className={styles.stats}>
               <h3>Estatísticas Base</h3>
               {pokemon.stats.map((s) => (
@@ -72,9 +77,13 @@ export default function PokemonDetail() {
                   <p>{statNameMap[s.stat.name] || s.stat.name}:</p>
                   <p>
                     <strong>{s.base_stat}</strong>
-                    <span 
-                      className={styles.statBar} 
-                      style={{ '--stat-width': `${(s.base_stat / 255) * 100}%` } as React.CSSProperties}
+                    <span
+                      className={styles.statBar}
+                      style={
+                        {
+                          "--stat-width": `${(s.base_stat / 255) * 100}%`,
+                        } as React.CSSProperties
+                      }
                     ></span>
                   </p>
                 </div>
@@ -86,7 +95,7 @@ export default function PokemonDetail() {
               <div className={styles.abilityList}>
                 {pokemon.abilities.map((a) => (
                   <span key={a.ability.name} className={styles.ability}>
-                    {a.ability.name} {a.is_hidden && '(Secreta)'}
+                    {a.ability.name} {a.is_hidden && "(Secreta)"}
                   </span>
                 ))}
               </div>

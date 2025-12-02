@@ -3,7 +3,7 @@
   height: 100vh;
   display: flex;
   overflow: hidden;
-  font-family: 'Poppins', sans-serif;
+  font-family: "Poppins", sans-serif;
 }
 
 .fullpageStrip {
@@ -14,7 +14,9 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  transition: width 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94), filter 0.6s;
+  transition:
+    width 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+    filter 0.6s;
   box-shadow: inset 0 0 0 1000px rgba(0, 0, 0, 0.25);
   text-decoration: none;
   cursor: pointer;
@@ -29,14 +31,15 @@
 
 /* Temas Laterais */
 .left {
-  background-color: #b71c1c; 
+  background-color: #b71c1c;
 }
 
 .right {
   background-color: #0d47a1;
 }
 
-.left h2, .right h2 {
+.left h2,
+.right h2 {
   color: #fff;
   text-shadow: 0 5px 12px rgba(0, 0, 0, 0.9);
 }
@@ -72,13 +75,13 @@
 }
 
 .left .panelContent button {
-    background: linear-gradient(to right, #ffeb3b, #ffc107);
-    color: #333;
+  background: linear-gradient(to right, #ffeb3b, #ffc107);
+  color: #333;
 }
 
 .right .panelContent button {
-    background: linear-gradient(to right, #42a5f5, #1976d2); 
-    color: #fff;
+  background: linear-gradient(to right, #42a5f5, #1976d2);
+  color: #fff;
 }
 
 .panelContent button:hover {
@@ -115,111 +118,113 @@
 }
 
 .textoGradiente {
-    background: linear-gradient(to right, #b71c1c, #0d47a1); 
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
-    font-size: 48px;
-    font-weight: 900;
-    display: block;
-    padding-bottom: 20px;
-    position: sticky;
-    top: 0; 
-    z-index: 10;
-    background-color: #f7f7f7;
-    text-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
-    text-align: center;
-    width: 100%;
+  background: linear-gradient(to right, #b71c1c, #0d47a1);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-size: 48px;
+  font-weight: 900;
+  display: block;
+  padding-bottom: 20px;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background-color: #f7f7f7;
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  width: 100%;
 }
 
 .votePanel {
-    width: 90%;
-    max-width: 400px;
-    margin-top: 30px;
-    padding: 30px 20px;
-    border-radius: 15px;
-    background: #fff;
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+  width: 90%;
+  max-width: 400px;
+  margin-top: 30px;
+  padding: 30px 20px;
+  border-radius: 15px;
+  background: #fff;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
 }
 
 .scoreRow {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 10px;
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
 }
 
 .scoreCount {
-    font-size: 2.5rem;
-    font-weight: 800;
-    padding: 5px 15px;
-    border-radius: 8px;
-    min-width: 80px;
-    text-align: center;
-    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+  font-size: 2.5rem;
+  font-weight: 800;
+  padding: 5px 15px;
+  border-radius: 8px;
+  min-width: 80px;
+  text-align: center;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
 }
 
 .digimonScore {
-    color: #b71c1c; 
-    background-color: #ffe0b2;
+  color: #b71c1c;
+  background-color: #ffe0b2;
 }
 
 .pokemonScore {
-    color: #0d47a1; 
-    background-color: #b3e5fc;
+  color: #0d47a1;
+  background-color: #b3e5fc;
 }
 
 .progressBarContainer {
-    width: 100%;
-    height: 25px;
-    background-color: #b3e5fc;
-    border-radius: 12px;
-    overflow: hidden;
-    margin: 20px 0;
-    border: 2px solid #ccc;
-    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.2);
+  width: 100%;
+  height: 25px;
+  background-color: #b3e5fc;
+  border-radius: 12px;
+  overflow: hidden;
+  margin: 20px 0;
+  border: 2px solid #ccc;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.2);
 }
 
 .progressBarFill {
-    height: 100%;
-    background-color: #b71c1c;
-    transition: width 0.5s ease-in-out;
+  height: 100%;
+  background-color: #b71c1c;
+  transition: width 0.5s ease-in-out;
 }
 
 .voteMessage {
-    text-align: center;
-    font-size: 1.1rem;
-    color: #666;
-    margin-top: 20px;
-    margin-bottom: 25px;
-    font-style: italic;
+  text-align: center;
+  font-size: 1.1rem;
+  color: #666;
+  margin-top: 20px;
+  margin-bottom: 25px;
+  font-style: italic;
 }
 
 .voteLinkContainer {
-    display: flex;
-    justify-content: space-around;
-    gap: 10px;
+  display: flex;
+  justify-content: space-around;
+  gap: 10px;
 }
 
 .voteLink {
-    text-decoration: none;
-    padding: 8px 15px;
-    border-radius: 20px;
-    font-weight: 700;
-    font-size: 0.9rem;
-    transition: background-color 0.3s, transform 0.2s;
-    flex: 1;
-    text-align: center;
+  text-decoration: none;
+  padding: 8px 15px;
+  border-radius: 20px;
+  font-weight: 700;
+  font-size: 0.9rem;
+  transition:
+    background-color 0.3s,
+    transform 0.2s;
+  flex: 1;
+  text-align: center;
 }
 
 .voteLink:nth-child(1) {
-    background-color: #ffc107;
-    color: #333;
+  background-color: #ffc107;
+  color: #333;
 }
 .voteLink:nth-child(2) {
-    background-color: #1976d2;
-    color: #fff;
+  background-color: #1976d2;
+  color: #fff;
 }
 .voteLink:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }

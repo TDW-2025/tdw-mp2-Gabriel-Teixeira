@@ -1,4 +1,4 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice } from "@reduxjs/toolkit";
 
 interface VotingState {
   digimonVotes: number;
@@ -7,7 +7,7 @@ interface VotingState {
 
 const loadInitialState = (): VotingState => {
   try {
-    const serializedState = localStorage.getItem('appVotes');
+    const serializedState = localStorage.getItem("appVotes");
     if (serializedState === null) {
       return { digimonVotes: 0, pokemonVotes: 0 };
     }
@@ -23,23 +23,23 @@ const initialState: VotingState = loadInitialState();
 const saveState = (state: VotingState) => {
   try {
     const serializedState = JSON.stringify(state);
-    localStorage.setItem('appVotes', serializedState);
+    localStorage.setItem("appVotes", serializedState);
   } catch (e) {
     console.error("Could not save votes to localStorage", e);
   }
 };
 
 const votingSlice = createSlice({
-  name: 'voting',
+  name: "voting",
   initialState,
   reducers: {
     voteForDigimon: (state) => {
       state.digimonVotes += 1;
-      saveState(state); 
+      saveState(state);
     },
     voteForPokemon: (state) => {
       state.pokemonVotes += 1;
-      saveState(state); 
+      saveState(state);
     },
   },
 });
