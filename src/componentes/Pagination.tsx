@@ -31,7 +31,6 @@ export default function Pagination({
 
   return (
     <div className={styles.pagination}>
-
       <button
         className={styles.detailsButton}
         disabled={currentPage === 1}
@@ -47,7 +46,7 @@ export default function Pagination({
           onClick={() => onPageChange(num)}
           style={{
             background: num === currentPage ? "#d50000" : "#ff0000",
-            fontWeight: num === currentPage ? "bold" : "normal"
+            fontWeight: num === currentPage ? "bold" : "normal",
           }}
         >
           {num}
@@ -61,7 +60,6 @@ export default function Pagination({
       >
         ›
       </button>
-
     </div>
   );
 }

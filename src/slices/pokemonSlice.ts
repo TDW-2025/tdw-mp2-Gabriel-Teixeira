@@ -30,7 +30,9 @@ export const pokemonStatusSlice = createSlice({
         state.favorites.push(name);
       }
 
-      console.log(" Lista atualizada de favoritos (depois):", [...state.favorites]);
+      console.log(" Lista atualizada de favoritos (depois):", [
+        ...state.favorites,
+      ]);
       console.log("----------------------------------------");
     },
 
@@ -49,7 +51,9 @@ export const pokemonStatusSlice = createSlice({
         state.caught.push(name);
       }
 
-      console.log(" Lista atualizada de apanhados (depois):", [...state.caught]);
+      console.log(" Lista atualizada de apanhados (depois):", [
+        ...state.caught,
+      ]);
       console.log("----------------------------------------");
     },
   },

@@ -7,7 +7,7 @@
   align-items: center;
   background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
   overflow: hidden;
-  font-family: 'Poppins', sans-serif;
+  font-family: "Poppins", sans-serif;
   color: #f0f8ff;
 }
 
@@ -15,9 +15,9 @@
   font-size: 3.5rem;
   font-weight: 900;
   margin-bottom: 25px;
-  color: #222; 
+  color: #222;
   text-transform: uppercase;
-  text-shadow: none; 
+  text-shadow: none;
   letter-spacing: 2px;
   text-align: center;
 }
@@ -26,7 +26,7 @@
   width: 250px;
   height: 250px;
   object-fit: cover;
-  background: #fff; 
+  background: #fff;
   border: 5px solid #3498db;
   border-radius: 50%;
   margin-bottom: 20px;
@@ -35,17 +35,17 @@
 }
 
 .image:hover {
-    transform: scale(1.05) rotate(2deg);
+  transform: scale(1.05) rotate(2deg);
 }
 
 .level {
   font-size: 1.8rem;
   font-weight: 700;
-  color: #333; 
+  color: #333;
   text-shadow: none;
   padding: 5px 15px;
   border-radius: 5px;
-  background: #e0f7fa; 
+  background: #e0f7fa;
   margin-top: 15px;
 }
 

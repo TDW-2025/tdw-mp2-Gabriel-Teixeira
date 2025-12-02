@@ -1,15 +1,17 @@
-html, body, #root {
+html,
+body,
+#root {
   height: 100%;
   margin: 0;
-  font-family: 'Arial', sans-serif;
+  font-family: "Arial", sans-serif;
   background-color: #f0f0f0;
   overflow-x: hidden;
 }
 
 body {
   display: flex;
-  justify-content: center; 
-  align-items: center;  
+  justify-content: center;
+  align-items: center;
 }
 
 .containerDigimon {
@@ -20,10 +22,10 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  background-image: url('../assets/fundodigimon.jpg');
+  background-image: url("../assets/fundodigimon.jpg");
   background-size: cover;
   background-position: center;
-  font-family: 'Montserrat', sans-serif;
+  font-family: "Montserrat", sans-serif;
   position: relative;
   box-shadow: inset 0 0 0 1000px rgba(0, 0, 0, 0.4);
 }
@@ -35,17 +37,17 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  font-family: 'Poppins', sans-serif;
-  background-image: url('../assets/FundoPokemon.png');
+  font-family: "Poppins", sans-serif;
+  background-image: url("../assets/FundoPokemon.png");
   background-size: cover;
   background-position: center;
-  margin-top: 0; 
+  margin-top: 0;
   box-sizing: border-box;
   box-shadow: inset 0 0 0 1000px rgba(255, 255, 255, 0.1);
 }
 
 .backButton {
-  position: absolute; 
+  position: absolute;
   top: 30px;
   left: 30px;
   padding: 10px 20px;
@@ -54,7 +56,7 @@ body {
   border-radius: 8px;
   color: #fff;
   font-weight: 600;
-  font-size: 1.0rem;
+  font-size: 1rem;
   cursor: pointer;
   text-decoration: none;
   transition: all 0.3s ease;
@@ -68,13 +70,16 @@ body {
   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
 }
 
-.card, .listItem {
+.card,
+.listItem {
   background: #ffffff;
   border: 1px solid #ddd;
   border-radius: 12px;
   overflow: hidden;
   position: relative;
-  transition: transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1), box-shadow 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+  transition:
+    transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1),
+    box-shadow 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
   text-align: center;
   font-weight: 600;
   font-size: 1.1rem;
@@ -83,8 +88,10 @@ body {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-.card:hover, .listItem:hover {
+.card:hover,
+.listItem:hover {
   transform: translateY(-5px);
-  box-shadow: 0 12px 25px rgba(0, 0, 0, 0.25), 0 0 20px rgba(0, 81, 255, 0.15);
+  box-shadow:
+    0 12px 25px rgba(0, 0, 0, 0.25),
+    0 0 20px rgba(0, 81, 255, 0.15);
 }
-

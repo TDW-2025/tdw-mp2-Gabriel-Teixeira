@@ -27,17 +27,16 @@ export default function DigimonCard({
       <button
         className={styles.favButton}
         onClick={(e) => {
-            e.stopPropagation();
-            onToggleFavorito();
+          e.stopPropagation();
+          onToggleFavorito();
         }}
-        >
+      >
         <HeartStraight
-            size={28}
-            weight="duotone"
-            color={isFavorito ? "red" : "#666"}
+          size={28}
+          weight="duotone"
+          color={isFavorito ? "red" : "#666"}
         />
-        </button>
-
+      </button>
     </li>
   );
 }

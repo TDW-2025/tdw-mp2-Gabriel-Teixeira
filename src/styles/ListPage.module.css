@@ -1,8 +1,9 @@
-
 .title {
   font-size: 3rem;
-  color: #FF8C00;
-  text-shadow: 0 0 10px rgba(0, 0, 0, 1), 0 0 20px rgba(255, 140, 0, 0.5); 
+  color: #ff8c00;
+  text-shadow:
+    0 0 10px rgba(0, 0, 0, 1),
+    0 0 20px rgba(255, 140, 0, 0.5);
   margin-bottom: 30px;
   font-weight: 900;
   text-transform: uppercase;
@@ -28,28 +29,30 @@
 
 .searchBox input:focus {
   border-color: #2980b9;
-  box-shadow: 0 0 15px rgba(52, 152, 219, 0.8), inset 0 2px 5px rgba(0, 0, 0, 0.4);
+  box-shadow:
+    0 0 15px rgba(52, 152, 219, 0.8),
+    inset 0 2px 5px rgba(0, 0, 0, 0.4);
   outline: none;
 }
 
 .actions {
   display: flex;
-  gap: 15px; 
-  justify-content: center; 
-  margin-bottom: 25px; 
+  gap: 15px;
+  justify-content: center;
+  margin-bottom: 25px;
   margin-top: 10px;
 }
 
 .actionButton {
   padding: 10px 20px;
-  background: #1976d2; 
+  background: #1976d2;
   border: none;
   border-radius: 8px;
   color: #fff;
   font-weight: 600;
-  font-size: 1.0rem;
+  font-size: 1rem;
   cursor: pointer;
-  text-decoration: none; 
+  text-decoration: none;
   transition: all 0.3s ease;
   z-index: 100;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
@@ -60,7 +63,6 @@
   background: #1565c0;
   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
 }
-
 
 .list {
   display: grid;
@@ -111,9 +113,9 @@
 }
 
 .noResults {
-    color: #fff;
-    font-size: 1.2rem;
-    margin-top: 20px;
+  color: #fff;
+  font-size: 1.2rem;
+  margin-top: 20px;
 }
 
 @media (max-width: 1024px) {

@@ -3,8 +3,8 @@ import { useNavigate } from "react-router-dom";
 import styles from "../styles/BackButton.module.css";
 
 interface BackButtonProps {
-  type: string; 
-  label?: string; 
+  type: string;
+  label?: string;
 }
 
 const BackButton: React.FC<BackButtonProps> = ({ type, label = "Voltar" }) => {

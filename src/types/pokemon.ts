@@ -4,7 +4,7 @@ interface NamedAPIResource {
 }
 
 export interface PokemonAbility {
-  is_hidden: boolean; 
+  is_hidden: boolean;
   slot: number;
   ability: NamedAPIResource;
 }
@@ -19,7 +19,6 @@ export interface PokemonType {
   type: NamedAPIResource;
 }
 
-
 interface BlackWhiteSprites {
   front_default: string | null;
   back_default: string | null;
@@ -30,8 +29,8 @@ interface BlackWhiteSprites {
 }
 
 interface VersionSprites {
-  'generation-v': {
-    'black-white': BlackWhiteSprites;
+  "generation-v": {
+    "black-white": BlackWhiteSprites;
   };
 }
 
@@ -42,12 +41,12 @@ export interface PokemonSprites {
 }
 
 export interface Pokemon {
-  id: number; 
+  id: number;
   name: string;
   height: number;
   weight: number;
   sprites: PokemonSprites;
   types: PokemonType[];
   stats: PokemonStat[];
-  abilities: PokemonAbility[]; 
+  abilities: PokemonAbility[];
 }

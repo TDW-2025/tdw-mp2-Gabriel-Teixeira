@@ -10,7 +10,7 @@ export const digimonApi = createApi({
     getDigimonList: builder.query<Digimon[], void>({
       query: () => "digimon",
     }),
-    getDigimonByName: builder.query<Digimon[], string>({ 
+    getDigimonByName: builder.query<Digimon[], string>({
       query: (name) => `digimon/name/${name}`,
     }),
   }),
