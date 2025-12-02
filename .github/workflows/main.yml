@@ -56,15 +56,14 @@ jobs:
             exit 1
           fi
 
-      - name: Deploy to Netlify
-        if: github.ref == 'refs/heads/main'
+      - name: Deploy Preview to Netlify
+        if: github.event_name == 'pull_request'
         env:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
           NETLIFY_SITE_ID: ${{ secrets.SITEID }}
         run: |
-          BRANCH_NAME="${GITHUB_REF##*/}"
-          if [ "$BRANCH_NAME" = "main" ]; then
-            npx netlify-cli deploy --auth $NETLIFY_AUTH_TOKEN --site $NETLIFY_SITE_ID --dir=dist --prod
-          else
-            npx netlify-cli deploy --auth $NETLIFY_AUTH_TOKEN --site $NETLIFY_SITE_ID --dir=dist --message "Preview build from develop branch"
-          fi
+          npx netlify-cli deploy \
+            --auth $NETLIFY_AUTH_TOKEN \
+            --site $NETLIFY_SITE_ID \
+            --dir=dist \
+            --message "Preview build for PR #${{ github.event.pull_request.number }}"
