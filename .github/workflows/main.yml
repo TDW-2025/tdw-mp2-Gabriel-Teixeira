@@ -56,14 +56,11 @@ jobs:
             exit 1
           fi
 
-      - name: Deploy Preview to Netlify
-        if: github.event_name == 'pull_request'
+      - name: Deploy Production to Netlify
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
         env:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
           NETLIFY_SITE_ID: ${{ secrets.SITEID }}
         run: |
-          npx netlify-cli deploy \
-            --auth $NETLIFY_AUTH_TOKEN \
-            --site $NETLIFY_SITE_ID \
-            --dir=dist \
-            --message "Preview build for PR #${{ github.event.pull_request.number }}"
+          echo "Deploying production build..."
+          npx netlify-cli deploy --auth "$NETLIFY_AUTH_TOKEN" --site "$NETLIFY_SITE_ID" --dir=dist --prod
