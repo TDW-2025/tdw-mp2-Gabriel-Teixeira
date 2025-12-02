@@ -43,6 +43,9 @@ jobs:
       - name: Check TypeScript types
         run: npx tsc --noEmit
 
+      - name: Check Prettier formatting
+        run: npx prettier . --check
+
       - name: Build project
         run: npm run build
 
